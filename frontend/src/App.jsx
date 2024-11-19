@@ -17,6 +17,13 @@ const App = () => {
       >
         Facebook
       </button>
+      <button
+        onClick={() =>
+          (window.location.href = "http://localhost:5000/auth/logout")
+        }
+      >
+        Logout
+      </button>
     </>
   );
 };

@@ -5,6 +5,7 @@ import databaseConnection from "../backend/config/databaseConnection.js";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 import auth from "../backend/routes/authRoutes.js";
+import user from "../backend/routes/userRoutes.js";
 import "./config/googleStrategy.js";
 import "./config/facebookStrategy.js";
 import passport from "passport";
@@ -69,6 +70,7 @@ passport.deserializeUser(async (id, done) => {
 app.use("/auth", auth);
 
 // user routes
+app.use("/user", user);
 
 // product routes
 
