@@ -2,9 +2,13 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import databaseConnection from "../backend/config/databaseConnection.js";
-import passport from "passport";
 import session from "express-session";
 import MongoStore from "connect-mongo";
+import auth from "../backend/routes/authRoutes.js";
+import "./config/googleStrategy.js";
+import "./config/facebookStrategy.js";
+import passport from "passport";
+import User from "./models/userModel.js";
 
 dotenv.config();
 
@@ -15,6 +19,7 @@ databaseConnection();
 
 // middlewares
 app.use(express.json());
+// cors
 app.use(
   cors({
     origin: "http://localhost:5173",
@@ -22,6 +27,7 @@ app.use(
     methods: ["POST", "GET", "PUT", "DELETE"],
   })
 );
+// session
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
@@ -40,10 +46,27 @@ app.use(
   })
 );
 
-// app.use(passport.initialize());
-// app.use(passport.session());
+app.use(passport.initialize());
+app.use(passport.session());
+
+// serialize passport
+passport.serializeUser((user, done) => {
+  console.log(user);
+  done(null, user._id);
+});
+
+// deserialize passport
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await User.findById(id);
+    done(null, user);
+  } catch (error) {
+    done(error);
+  }
+});
 
 // auth routes
+app.use("/auth", auth);
 
 // user routes
 

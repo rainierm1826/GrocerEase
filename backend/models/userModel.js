@@ -1,9 +1,22 @@
+import mongoose from "mongoose";
+
 const userSchema = new mongoose.Schema(
   {
+    googleId: {
+      type: String,
+      unique: true,
+    },
+    facebookId: {
+      type: String,
+      unique: true,
+    },
+    image: {
+      type: String,
+      required: true,
+    },
     email: {
       type: String,
       required: true,
-      unique: true,
     },
     firstName: {
       type: String,
@@ -15,22 +28,41 @@ const userSchema = new mongoose.Schema(
     },
     middleName: {
       type: String,
+      default: "",
     },
     sex: {
       type: String,
-      required: true,
+      default: "",
     },
     birthday: {
-      type: String,
-      required: true,
+      type: Date,
+      default: Date.now,
     },
     location: {
-      province: String,
-      city: String,
-      barangay: String,
-      street: String,
-      blk: String,
-      lot: String,
+      province: {
+        type: String,
+        default: "",
+      },
+      city: {
+        type: String,
+        default: "",
+      },
+      barangay: {
+        type: String,
+        default: "",
+      },
+      street: {
+        type: String,
+        default: "",
+      },
+      blk: {
+        type: String,
+        default: "",
+      },
+      lot: {
+        type: String,
+        default: "",
+      },
     },
   },
   {
@@ -38,5 +70,5 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-const User = mongoose.model("user", userSchema);
+const User = mongoose.model("User", userSchema);
 export default User;

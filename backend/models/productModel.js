@@ -5,19 +5,19 @@ const productSchema = new mongoose.Schema(
     productName: {
       type: String,
       required: True,
-      unique: True,
+      unique: true,
     },
     price: {
       type: String,
-      require: True,
+      require: true,
     },
     stock: {
       type: String,
-      require: True,
+      require: true,
     },
   },
   {
-    timestamps: True,
+    timestamps: true,
   }
 );
 

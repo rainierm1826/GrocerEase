@@ -10,33 +10,33 @@ const orderSchema = new mongoose.Schema(
       {
         quantity: {
           type: Number,
-          required: True,
+          required: true,
         },
         purchaseAtPrice: {
           type: Number,
-          required: True,
+          required: true,
         },
         total: {
           type: Number,
-          required: True,
+          required: true,
         },
       },
     ],
     totalAmount: {
       type: Number,
-      required: True,
+      required: true,
     },
     status: {
       type: String,
-      required: True,
+      required: true,
     },
     paymentMethod: {
       type: String,
-      required: True,
+      required: true,
     },
   },
   {
-    timestamps: True,
+    timestamps: true,
   }
 );
 
