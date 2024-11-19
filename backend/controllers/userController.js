@@ -7,7 +7,7 @@ const updateUser = async (req, res) => {
     const updatedUser = await User.findByIdAndUpdate(
       _id,
       { $set: newProfile },
-      { new: true, runValidators: true }
+      { new: true }
     );
 
     if (!updatedUser) {
