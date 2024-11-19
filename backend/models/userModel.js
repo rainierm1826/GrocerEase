@@ -4,11 +4,9 @@ const userSchema = new mongoose.Schema(
   {
     googleId: {
       type: String,
-      unique: true,
     },
     facebookId: {
       type: String,
-      unique: true,
     },
     image: {
       type: String,
