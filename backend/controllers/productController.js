@@ -1,6 +1,6 @@
 import Product from "../models/productModel.js";
 
-// get product
+// get products
 export const getProducts = async (req, res) => {
   try {
     const products = await Product.find();
@@ -9,7 +9,20 @@ export const getProducts = async (req, res) => {
 
     return res.status(200).json({ status: true, products });
   } catch (error) {
-    console.log(error);
+    return res.status(500).json({ status: false, message: "internal error" });
+  }
+};
+
+// get product
+export const getProduct = async (req, res) => {
+  try {
+    const { productId } = req.params;
+    const product = await Product.findById(productId);
+    if (!product)
+      return res.status(400).json({ status: false, message: "no product" });
+
+    return res.status(200).json({ status: true, product });
+  } catch (error) {
     return res.status(500).json({ status: false, message: "internal error" });
   }
 };
