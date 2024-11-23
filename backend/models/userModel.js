@@ -36,6 +36,10 @@ const userSchema = new mongoose.Schema(
       type: Date,
       default: Date.now,
     },
+    contactNumber: {
+      type: Number,
+      default: "",
+    },
     location: {
       province: {
         type: String,

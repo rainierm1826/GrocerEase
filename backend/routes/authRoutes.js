@@ -34,9 +34,6 @@ router.get(
 );
 
 router.get("/user", (req, res) => {
-  console.log(req);
-  console.log("session: ", req.session);
-  console.log("user: ", req.user);
   if (req.isAuthenticated()) {
     return res.status(200).json({
       status: true,

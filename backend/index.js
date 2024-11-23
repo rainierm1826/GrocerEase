@@ -8,7 +8,7 @@ import auth from "../backend/routes/authRoutes.js";
 import user from "../backend/routes/userRoutes.js";
 import product from "../backend/routes/productRoutes.js";
 import cart from "../backend/routes/cartRoutes.js";
-import order from "../backend/routes/orderRoutes.js"
+import order from "../backend/routes/orderRoutes.js";
 import "./config/googleStrategy.js";
 import "./config/facebookStrategy.js";
 import passport from "passport";
@@ -55,7 +55,6 @@ app.use(passport.session());
 
 // serialize passport
 passport.serializeUser((user, done) => {
-  console.log(user);
   done(null, user._id);
 });
 
@@ -82,7 +81,7 @@ app.use("/product", product);
 app.use("/cart", cart);
 
 // order routes
-app.use("/order", order)
+app.use("/order", order);
 
 // sales routes
 

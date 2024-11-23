@@ -4,6 +4,9 @@ const updateUser = async (req, res) => {
   try {
     const { _id, newProfile } = req.body;
 
+    if (!_id)
+      return res.status(404).json({ status: false, message: "id not found" });
+
     const updatedUser = await User.findByIdAndUpdate(
       _id,
       { $set: newProfile },
