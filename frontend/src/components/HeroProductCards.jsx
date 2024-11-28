@@ -1,18 +1,21 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
-const img =
-  "https://afodltd.com/wp-content/uploads/2019/03/CK-10-008-600x450.png";
+const HeroProductCards = ({ productName, image, _id, price }) => {
+  const navigate = useNavigate();
 
-const HeroProductCards = () => {
   return (
     <div className="">
-      <div className="shadow-lg rounded-lg relative overflow-hidden">
-        <img src={img} alt="" className="w-full" />
+      <div
+        className="shadow-lg rounded-lg relative overflow-hidden cursor-pointer"
+        onClick={() => navigate(`/product/${_id}`)}
+      >
+        <img src={image} alt="" className="w-full h-48" />
         <p className="absolute bottom-0 bg-primaryBlue text-primaryWhite w-full text-center font-bold py-1">
-          Item Name
+          {productName}
         </p>
       </div>
-      <p className="text-center">₱100</p>
+      <p className="text-center">{`₱ ${price}`}</p>
     </div>
   );
 };

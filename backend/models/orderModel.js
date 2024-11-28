@@ -4,12 +4,13 @@ const orderSchema = new mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "user",
+      ref: "User",
     },
     products: [
       {
         productId: {
-          type: String,
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Product",
           required: true,
         },
         quantity: {
@@ -32,7 +33,7 @@ const orderSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      required: true,
+      default: "pending",
     },
     paymentMethod: {
       type: String,

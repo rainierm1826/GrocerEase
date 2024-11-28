@@ -54,7 +54,7 @@ export const updateProduct = async (req, res) => {
 
 // add product
 export const addProduct = async (req, res) => {
-  const { image, productName, category, price, stock } = req.body;
+  const { image, productName, category, price, stock, measurement } = req.body;
 
   try {
     const newProduct = new Product({
@@ -63,6 +63,7 @@ export const addProduct = async (req, res) => {
       category,
       price,
       stock,
+      measurement,
     });
 
     await newProduct.save();
@@ -71,7 +72,10 @@ export const addProduct = async (req, res) => {
       .status(200)
       .json({ status: true, newProduct, message: "Added Successfully" });
   } catch (error) {
-    return res.status(500).json({ status: false, message: "internal error" });
+    console.log(error);
+    return res
+      .status(500)
+      .json({ status: false, message: "internal error", error: error });
   }
 };
 
@@ -91,7 +95,6 @@ export const deleteProduct = async (req, res) => {
       .status(200)
       .json({ status: true, message: "Deleted successfully" });
   } catch (error) {
-    console.log(error);
     return res.status(500).json({ status: false, message: "internal error" });
   }
 };

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Filter from "../components/Filters";
 import HeroCards from "../components/HeroCards";
 import HeroProductCards from "../components/HeroProductCards";
@@ -6,15 +6,42 @@ import heroImage from "../assets/heroImage.png";
 import Login from "../pages/Login";
 import { useSelector, useDispatch } from "react-redux";
 import { RotateLoader } from "react-spinners";
+import { useQuery } from "@tanstack/react-query";
+import { getUserProducts } from "../api/product";
 
 const Hero = () => {
   const userInfo = useSelector((state) => state.user.user);
   const loading = useSelector((state) => state.user.loading);
 
+  const { data, isLoading, isError } = useQuery(
+    ["userProduct"],
+    getUserProducts
+  );
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <RotateLoader color="#fffffe" size={15} />
+      </div>
+    );
+  }
+
+  if (isError) {
+    return <div className="text-red-500">Error fetching products!</div>;
+  }
+
+  const products = data?.products || [];
+
+  if (!products) {
+    return (
+      <div className="flex justify-center items-center font-bold text-2xl text-primaryBlue">
+        No Product Found
+      </div>
+    );
+  }
+
   return (
     <div className="relative">
-      {/* <Filter /> */}
-
       <div className="bg-gradient-radial from-[#23c3cb] to-[#137db8]">
         <div className="container grid grid-cols-1 md:grid-cols-2">
           <div className="">
@@ -33,24 +60,28 @@ const Hero = () => {
           </div>
 
           <div className="flex justify-end w-full">
-            <img src={heroImage} alt="" className="w-1/2" />
+            <img src={heroImage} alt="Hero" className="w-1/2" />
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 py-3 px-7 -mt-14 gap-5 container md:grid-cols-3 md:px-16">
+      <div className="grid grid-cols-1 py-3 px-7 -mt-14 gap-5 container lg:grid-cols-3 lg:-mt-14 md:grid-cols-2 md:px-10 md:-mt-4 sm:grid-cols-1 sm:px-16">
         <HeroCards />
         <HeroCards />
         <HeroCards />
       </div>
-      <div className="container grid grid-cols-2 gap-5 py-3 px-5 md:grid-cols-5">
-        <HeroProductCards />
-        <HeroProductCards />
-        <HeroProductCards />
-        <HeroProductCards />
-        <HeroProductCards />
+
+      <div className="container grid grid-cols-2 gap-5 py-3 px-5 md:grid-cols-6">
+        {products.map((product) => (
+          <HeroProductCards
+            key={product._id}
+            productName={product.productName}
+            image={product.image}
+            price={product.price}
+            _id={product._id}
+          />
+        ))}
       </div>
-      <Login />
     </div>
   );
 };

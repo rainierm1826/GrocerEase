@@ -9,18 +9,21 @@ const productSchema = new mongoose.Schema(
     productName: {
       type: String,
       required: true,
-      unique: true,
     },
     category: {
       type: String,
       required: true,
     },
-    price: {
+    measurement: {
       type: String,
       required: true,
     },
+    price: {
+      type: Number,
+      required: true,
+    },
     stock: {
-      type: String,
+      type: Number,
       required: true,
     },
   },
@@ -29,5 +32,5 @@ const productSchema = new mongoose.Schema(
   }
 );
 
-const Product = mongoose.model("product", productSchema);
+const Product = mongoose.model("Product", productSchema);
 export default Product;

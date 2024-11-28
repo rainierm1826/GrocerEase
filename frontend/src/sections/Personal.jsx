@@ -3,9 +3,14 @@ import ProfileImage from "../components/ProfileImage";
 import { useSelector } from "react-redux";
 import { updateUser } from "../api/user";
 import { toast } from "react-toastify";
-import { fetchUser } from "../api/auth";
+import { useDispatch } from "react-redux";
+import { setUser } from "../features/userSlice";
+import { IoMenu } from "react-icons/io5";
+import { openSidebar } from "../features/sidebarSlice";
 
 const Personal = () => {
+  const dispatch = useDispatch();
+
   const userInfo = useSelector((state) => state.user.user);
 
   const personalFields = [
@@ -99,63 +104,71 @@ const Personal = () => {
 
   const filterEmptyFields = (data) => {
     if (typeof data === "object" && data !== null) {
-      const filteredEntries = Object.entries(data)
-        .map(([key, value]) => [key, filterEmptyFields(value)]) // Recursively filter nested objects
-        .filter(([key, value]) => {
-          // Remove empty strings or empty objects
-          if (typeof value === "object") {
-            return Object.keys(value).length > 0; // Keep only non-empty objects
-          }
-          return String(value).trim() !== ""; // Keep only non-empty strings
-        });
-
-      return Object.fromEntries(filteredEntries);
+      return Object.fromEntries(
+        Object.entries(data)
+          .filter(
+            ([key, value]) =>
+              value !== null &&
+              value !== undefined &&
+              String(value).trim() !== ""
+          )
+          .map(([key, value]) => [key, filterEmptyFields(value)])
+      );
     }
-    return data; // Return the value as-is for non-objects
+    return data;
   };
 
   const handleUpdate = async () => {
     try {
-      // Merge existing user data with new form data
-      const mergedData = {
-        ...userInfo.user,
-        ...formData,
-        location: {
-          ...userInfo.user.location,
-          ...formData.location,
-        },
+      const filteredData = filterEmptyFields(formData);
+
+      const updatedLocation = {
+        ...userInfo.user.location,
+        ...filteredData.location,
       };
 
-      // Filter out empty fields after merging
-      const filteredData = filterEmptyFields(mergedData);
+      const updatedData = {
+        ...filteredData,
+        location: updatedLocation,
+      };
 
-      // Prepare data for the API request
       const data = {
         _id: userInfo.user._id,
-        newProfile: filteredData,
+        newProfile: updatedData,
       };
 
-      // Send update request
-      const response = await updateUser(data);
-      console.log(response);
-      toast.success(response.message);
+      if (data) {
+        const response = await updateUser(data);
+        dispatch(setUser(response));
+        toast.success(response.message);
+      }
     } catch (error) {
-      console.error(error);
+      console.log(error);
       toast.error("Failed to update profile");
     }
   };
 
   return (
     <form>
-      <h4 className="font-bold text-2xl text-primaryBlue">
-        Personal Information
-      </h4>
+      <div className="flex justify-between items-center">
+        <h4 className="font-bold text-2xl text-primaryBlue">
+          Personal Information
+        </h4>
+        <button
+          type="button"
+          className="text-2xl text-primaryBlue md:hidden"
+          onClick={() => dispatch(openSidebar(true))}
+        >
+          <IoMenu />
+        </button>
+      </div>
+
       <hr className="my-5" />
       <div className="flex justify-center flex-col">
         <div className="flex justify-center">
           <ProfileImage w={16} h={16} />
         </div>
-        <div className="grid grid-cols-3 gap-5 mt-5">
+        <div className="grid grid-cols-1 gap-5 mt-5 md:grid-cols-3">
           {personalFields.map((value) => (
             <div className="flex flex-col" key={value.id}>
               <label
@@ -181,7 +194,7 @@ const Personal = () => {
           Contact Details
         </h4>
         <hr className="my-5" />
-        <div className="grid grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
           {contactFields.map((value) => (
             <div className="flex flex-col" key={value.id}>
               <label
@@ -202,7 +215,7 @@ const Personal = () => {
             </div>
           ))}
         </div>
-        <div className="flex justify-end">
+        <div className="flex justify-center md:justify-end">
           <button
             type="button"
             className="bg-primaryBlue text-primaryWhite mt-10 p-2 border-2 border-black rounded-full font-bold w-full max-w-xs"

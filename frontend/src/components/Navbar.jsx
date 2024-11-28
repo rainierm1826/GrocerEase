@@ -14,7 +14,6 @@ const Navbar = () => {
 
   const userInfo = useSelector((state) => state.user.user);
   const loading = useSelector((state) => state.user.loading);
-  const isAccountOptionsOpen = useSelector((state) => state.accountOption.open);
 
   const openLogin = () => {
     dispatch(setOpen(true));

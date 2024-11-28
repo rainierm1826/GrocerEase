@@ -3,12 +3,13 @@ import { useSelector, useDispatch } from "react-redux";
 import { setLogout } from "../features/userSlice";
 import { IoIosClose } from "react-icons/io";
 import { closeAccountOptions } from "../features/accountOptions";
-import { logout } from "../api/auth";
 import { FaShoppingCart } from "react-icons/fa";
 import { MdLogout } from "react-icons/md";
 import { RxAvatar } from "react-icons/rx";
 import ProfileImage from "./ProfileImage";
 import { useNavigate } from "react-router-dom";
+import { logout } from "../api/auth";
+import { FaList } from "react-icons/fa";
 
 const AccountOptions = () => {
   const navigate = useNavigate();
@@ -22,13 +23,19 @@ const AccountOptions = () => {
   };
 
   const handleLogout = async () => {
-    await logout;
+    const log = await logout();
+    console.log("response: ", log);
     dispatch(setLogout());
   };
 
   const goToProfile = () => {
     dispatch(closeAccountOptions(false));
     navigate("/account");
+  };
+
+  const goToOrder = () => {
+    dispatch(closeAccountOptions(false));
+    navigate("/user/order");
   };
 
   return (
@@ -51,6 +58,12 @@ const AccountOptions = () => {
           <FaShoppingCart />
           <p className="w-full flex justify-center items-center font-bold">
             Cart
+          </p>
+        </button>
+        <button className="profileOptionsButton" onClick={() => goToOrder()}>
+          <FaList />
+          <p className="w-full flex justify-center items-center font-bold">
+            Order
           </p>
         </button>
         <button className="profileOptionsButton" onClick={() => goToProfile()}>

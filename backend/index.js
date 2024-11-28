@@ -11,6 +11,7 @@ import cart from "../backend/routes/cartRoutes.js";
 import order from "../backend/routes/orderRoutes.js";
 import "./config/googleStrategy.js";
 import "./config/facebookStrategy.js";
+import "./config/localStrategy.js";
 import passport from "passport";
 import User from "./models/userModel.js";
 
@@ -22,7 +23,7 @@ const app = express();
 databaseConnection();
 
 // middlewares
-app.use(express.json());
+app.use(express.json({ limit: "10mb" }));
 // cors
 app.use(
   cors({
@@ -31,6 +32,8 @@ app.use(
     methods: ["POST", "GET", "PUT", "DELETE"],
   })
 );
+app.options("*", cors());
+
 // session
 app.use(
   session({

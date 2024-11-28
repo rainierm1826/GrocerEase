@@ -3,5 +3,5 @@
 @tailwind utilities;
 
 .profileOptionsButton {
-  @apply flex items-center justify-start w-full border-2 border-primaryBlue rounded-full p-2 hover:bg-primaryBlue hover:border-black transition-colors ease-in duration-150 hover:text-primaryWhite;
+  @apply text-sm flex items-center justify-start w-full border-2 border-primaryBlue rounded-full p-2 hover:bg-primaryBlue hover:border-black transition-colors ease-in duration-150 hover:text-primaryWhite;
 }

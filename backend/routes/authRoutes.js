@@ -46,6 +46,40 @@ router.get("/user", (req, res) => {
     .json({ status: false, user: null, message: "not auth" });
 });
 
+router.post("/admin/login", (req, res, next) => {
+  passport.authenticate("admin", (error, admin, info) => {
+    if (error) {
+      return res.status(500).json({
+        status: false,
+        message: "Authentication error",
+      });
+    }
+
+    if (!admin) {
+      return res.status(401).json({
+        status: false,
+        message: info.message || "Invalid credentials",
+      });
+    }
+    req.logIn(admin, (err) => {
+      if (err) {
+        return res.status(500).json({
+          status: false,
+          message: "Login error",
+        });
+      }
+
+      return res.json({
+        status: true,
+        message: "Logged in successfully",
+        admin: {
+          email: admin.email,
+        },
+      });
+    });
+  })(req, res, next);
+});
+
 router.get("/logout", (req, res) => {
   req.session.destroy((error) => {
     if (error) {
