@@ -1,18 +1,22 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import { RxHamburgerMenu } from "react-icons/rx";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useMutation } from "@tanstack/react-query";
 import { viewOrder } from "../api/order";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { LuDot } from "react-icons/lu";
 import { PulseLoader } from "react-spinners";
+import { openSidebar } from "../features/sidebarSlice";
 
 const Order = () => {
   const navigate = useNavigate();
   const userInfo = useSelector((state) => state.user.user);
+  const isSidebarOpen = useSelector((state) => state.sidebar.open);
+
   const [orders, setOrders] = useState([]);
+  const dispatch = useDispatch();
 
   // Redirect to home if userInfo is missing
   useEffect(() => {
@@ -20,6 +24,10 @@ const Order = () => {
       navigate("/");
     }
   }, [userInfo, navigate]);
+
+  const handleOpenSidebar = () => {
+    dispatch(openSidebar(true));
+  };
 
   const viewOrderMutation = useMutation({
     mutationFn: viewOrder,
@@ -49,7 +57,13 @@ const Order = () => {
   return (
     <div className="relative">
       <div className="grid grid-cols-4 container">
-        <div className="hidden sticky top-0 lg:block lg:col-span-1 pl-5">
+        <div
+          className={`${
+            isSidebarOpen
+              ? "fixed inset-0 z-50 lg:static lg:block w-2/3"
+              : "hidden lg:block"
+          }  lg:col-span-1 pl-5 w-full h-full bg-primaryWhite`}
+        >
           <Sidebar />
         </div>
         <div className="col-span-4 flex flex-col justify-start items-start px-5 py-2 lg:col-span-3">
@@ -57,7 +71,8 @@ const Order = () => {
             <h1 className="font-bold text-2xl text-primaryBlue">Your Orders</h1>
             <button
               type="button"
-              className="text-2xl text-primaryBlue md:hidden"
+              className="text-2xl text-primaryBlue lg:hidden"
+              onClick={() => handleOpenSidebar()}
             >
               <RxHamburgerMenu />
             </button>
@@ -74,6 +89,7 @@ const Order = () => {
                   <th className="text-center py-2">Name</th>
                   <th className="text-center py-2">Price</th>
                   <th className="text-center py-2">Quantity</th>
+                  <th className="text-center py-2">Total</th>
                   <th className="text-center py-2">Status</th>
                 </tr>
               </thead>
@@ -84,41 +100,71 @@ const Order = () => {
                     className="border-[1px] border-primaryBlue hover:bg-gray-100"
                   >
                     {order.products.map((product) => (
-                      <React.Fragment key={product.productId._id}>
-                        <td className="flex justify-center p-2">
-                          <img
-                            src={product.productId.image}
-                            alt={product.productId.productName}
-                            className="h-12 w-12 shadow-md object-cover rounded"
-                          />
-                        </td>
-                        <td className="text-xs text-center">
-                          {product.productId.productName}
-                        </td>
-                        <td className="text-xs text-center">
-                          ₱ {product.productId.price}
-                        </td>
-                        <td className="text-xs text-center">
-                          {product.quantity}
-                        </td>
-                        <td className="text-xs text-center">
-                          <span className="flex justify-center items-center gap-2">
-                            <LuDot
-                              className={`${
-                                order.status === "pending"
-                                  ? "text-gray-500"
-                                  : order.status === "cancel"
-                                  ? "text-red-500"
-                                  : order.status === "on delivery"
-                                  ? "text-green-500"
-                                  : "text-green-500"
-                              } text-4xl`}
-                            />
-                            {order.status === "pending" && "Pending"}
-                            {order.status === "onDelivery" && "On Delivery"}
-                            {order.status === "cancel" && "Cancelled"}
-                          </span>
-                        </td>
+                      <React.Fragment key={product.productId?._id}>
+                        {product.productId === null ? (
+                          <>
+                            <td className="flex justify-center p-2">
+                              <img
+                                src=""
+                                alt="not available"
+                                className="h-12 w-12 shadow-md object-cover rounded"
+                              />
+                            </td>
+                            <td className="text-xs text-center text-red-500">
+                              Product not available
+                            </td>
+                            <td className="text-xs text-center text-red-500">
+                              ₱ N/A
+                            </td>
+                            <td className="text-xs text-center text-red-500">
+                              N/A
+                            </td>
+                            <td className="text-xs text-center text-red-500">
+                              N/A
+                            </td>
+                          </>
+                        ) : (
+                          <>
+                            <td className="flex justify-center p-2">
+                              <img
+                                src={product.productId.image}
+                                alt={product.productId.productName}
+                                className="h-12 w-12 shadow-md object-cover rounded"
+                              />
+                            </td>
+                            <td className="text-xs text-center">
+                              {product.productId.productName}
+                            </td>
+                            <td className="text-xs text-center">
+                              ₱ {product.productId.price}
+                            </td>
+                            {console.log(order)}
+                            <td className="text-xs text-center">
+                              {product.quantity}
+                            </td>
+                            <td className="text-xs text-center">
+                              {product.total}
+                            </td>
+                            <td className="text-xs text-center">
+                              <span className="flex justify-center items-center gap-2">
+                                <LuDot
+                                  className={`${
+                                    order.status === "pending"
+                                      ? "text-gray-500"
+                                      : order.status === "cancel"
+                                      ? "text-red-500"
+                                      : order.status === "on delivery"
+                                      ? "text-green-500"
+                                      : "text-green-500"
+                                  } text-4xl`}
+                                />
+                                {order.status === "pending" && "Pending"}
+                                {order.status === "onDelivery" && "On Delivery"}
+                                {order.status === "cancel" && "Cancelled"}
+                              </span>
+                            </td>
+                          </>
+                        )}
                       </React.Fragment>
                     ))}
                   </tr>

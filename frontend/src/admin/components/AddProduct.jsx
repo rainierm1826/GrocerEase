@@ -51,8 +51,9 @@ const AddProduct = () => {
 
   const mutation = useMutation({
     mutationFn: async () => {
-      const { productName, category, price, stock, measurement } = formData;
-      if (!productName || !category || !measurement) {
+      const { productName, category, price, stock, measurement, description } =
+        formData;
+      if (!productName || !category || !measurement || !description) {
         toast.error("All fields are required");
         return;
       }
@@ -64,6 +65,7 @@ const AddProduct = () => {
         price,
         stock,
         measurement,
+        description,
       });
       setFormData({
         productName: "",
@@ -179,7 +181,7 @@ const AddProduct = () => {
             <label className="font-bold mb-2">Stocks</label>
             <input
               type="number"
-              className="rounded-md  text-xs shadow-md p-2 border border-gray-300 focus:ring focus:ring-primaryBlue"
+              className="rounded-md  text-xs shadow-md p-2 border border-gray-300 "
               placeholder="Number of stocks"
               name="stock"
               onChange={(e) => handleFormData(e)}
@@ -192,7 +194,7 @@ const AddProduct = () => {
             <label className="font-bold mb-2">Description</label>
             <textarea
               name="description"
-              className="rounded-md shadow-md text-xs p-2 border border-gray-300 focus:ring focus:ring-primaryBlue h-32"
+              className="rounded-md shadow-md text-xs p-2 border border-gray-300 h-32"
               placeholder="Enter brief description..."
               onChange={(e) => handleFormData(e)}
               value={formData.description}

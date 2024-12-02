@@ -38,6 +38,11 @@ const AccountOptions = () => {
     navigate("/user/order");
   };
 
+  const goToCart = () => {
+    dispatch(closeAccountOptions(false));
+    navigate("/user/cart");
+  };
+
   return (
     <div
       className={`${
@@ -54,7 +59,10 @@ const AccountOptions = () => {
         <p className="text-xs font-medium mb-5 ">{userInfo.user.email}</p>
         <ProfileImage h={12} w={12} />
         <p className="text-2xl font-medium">Hi, {userInfo.user.firstName}!</p>
-        <button className="profileOptionsButton mt-5 w-full">
+        <button
+          className="profileOptionsButton mt-5 w-full"
+          onClick={() => goToCart()}
+        >
           <FaShoppingCart />
           <p className="w-full flex justify-center items-center font-bold">
             Cart

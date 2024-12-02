@@ -24,7 +24,6 @@ const Order = () => {
   const handleStatus = (orderId, e) => {
     const newStatus = e.target.value;
 
-    // Create a map to track status changes for each order
     const updatedOrderStatuses = new Map(orderStatuses);
     updatedOrderStatuses.set(orderId, newStatus);
 
@@ -84,26 +83,50 @@ const Order = () => {
                 >
                   {/* Image Column */}
                   <td className="flex justify-center p-2">
-                    {order.products.map((product) => (
-                      <img
-                        src={product.productId.image}
-                        alt={product.productId.productName}
-                        className="h-12 w-12 shadow-md object-cover rounded"
-                      />
-                    ))}
+                    {order.products.map((product) =>
+                      product.productId ? (
+                        <img
+                          key={product._id}
+                          src={product.productId.image}
+                          alt={product.productId.productName}
+                          className="h-12 w-12 shadow-md object-cover rounded"
+                        />
+                      ) : (
+                        <td
+                          key={product._id}
+                          className="flex justify-center p-2"
+                        >
+                          <img
+                            src=""
+                            alt="not available"
+                            className="h-12 w-12 shadow-md object-cover rounded text-xs"
+                          />
+                        </td>
+                      )
+                    )}
                   </td>
 
+                  {/* User Name Column */}
                   <td className="text-xs text-center">
                     {order.user.firstName} {order.user.lastName}
                   </td>
 
                   {/* Product Name Column */}
                   <td className="text-xs text-center">
-                    {order.products.map((product) => (
-                      <div key={product._id}>
-                        {product.productId.productName}
-                      </div>
-                    ))}
+                    {order.products.map((product) =>
+                      product.productId ? (
+                        <div key={product._id}>
+                          {product.productId.productName}
+                        </div>
+                      ) : (
+                        <td
+                          key={product._id}
+                          className="text-xs text-center text-red-500"
+                        >
+                          <div>Product not available</div>
+                        </td>
+                      )
+                    )}
                   </td>
 
                   {/* Location Column */}
@@ -127,16 +150,26 @@ const Order = () => {
                   {/* Quantity Column */}
                   <td className="text-xs text-center">
                     {order.products.map((product) => (
-                      <div key={product._id}>{product.quantity}</div>
+                      <div key={product._id}>
+                        {product.productId ? (
+                          product.quantity
+                        ) : (
+                          <span className="text-xs text-red-500">N/A</span>
+                        )}
+                      </div>
                     ))}
                   </td>
 
                   {/* Total Column */}
                   <td className="text-xs text-center">
                     {order.products.map((product) => (
-                      <div key={product._id}>₱ {product.total}</div>
+                      <div key={product._id}>
+                        {product.productId ? `₱ ${product.total}` : "₱ 0.00"}
+                      </div>
                     ))}
                   </td>
+
+                  {/* Status Update Column */}
                   <td className="text-center w-auto">
                     <select
                       onChange={(e) => handleStatus(order._id, e)}

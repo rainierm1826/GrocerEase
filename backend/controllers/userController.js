@@ -1,6 +1,6 @@
 import User from "../models/userModel.js";
 
-const updateUser = async (req, res) => {
+export const updateUser = async (req, res) => {
   try {
     const { _id, newProfile } = req.body;
 
@@ -34,4 +34,16 @@ const updateUser = async (req, res) => {
   }
 };
 
-export default updateUser;
+export const getTotalUser = async (req, res) => {
+  try {
+    const totalUser = await User.countDocuments({})
+    if (!totalUser) {
+      return res.status(200).json({ status: true, totalUser: 0 });
+    }
+    return res.status(200).json({ status: true, totalUser });
+  } catch (error) {
+    return res.status(500).json({
+      status: false,
+    });
+  }
+};

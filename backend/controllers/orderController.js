@@ -37,7 +37,6 @@ export const checkout = async (req, res) => {
         },
       ],
       totalAmount,
-
       paymentMethod,
     });
     await checkOutOrder.save();
@@ -121,6 +120,7 @@ export const getOrders = async (req, res) => {
     const orders = await Order.find()
       .populate("user")
       .populate("products.productId")
+      .sort({ createdAt: -1 })
       .exec();
 
     return res.status(200).json({ status: true, orders });

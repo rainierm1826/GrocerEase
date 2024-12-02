@@ -32,7 +32,7 @@ const Sidebar = () => {
         <h4 className="font-bold text-2xl">Manage Your Account</h4>
         <button
           type="button"
-          className="block text-2xl text-primaryBlue md:hidden"
+          className="block text-2xl text-primaryBlue lg:hidden"
           onClick={() => dispatch(closeSidebar(false))}
         >
           <IoIosClose />

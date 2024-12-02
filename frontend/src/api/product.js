@@ -15,10 +15,18 @@ export const getUserProducts = async () => {
   }
 };
 
+export const filterProducts = async () => {
+  try {
+    const { data } = await product.get(`/${category}`);
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export const getUserProduct = async (productId) => {
   try {
     const { data } = await product.get(`/${productId}`);
-    console.log(data);
     return data;
   } catch (error) {
     console.error(error);

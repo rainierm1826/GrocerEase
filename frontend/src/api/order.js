@@ -14,7 +14,6 @@ export const checkout = async ({
   quantity,
   purchaseAtPrice,
 }) => {
-  console.log("total: ", quantity * purchaseAtPrice);
   const total = parseInt(quantity) * parseInt(purchaseAtPrice);
 
   try {
@@ -34,8 +33,7 @@ export const checkout = async ({
 
     return data;
   } catch (error) {
-    console.error("Error during checkout:", error);
-    throw error;
+    return error;
   }
 };
 

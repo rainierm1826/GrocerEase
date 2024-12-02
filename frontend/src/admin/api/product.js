@@ -12,6 +12,7 @@ export const addProduct = async ({
   price,
   stock,
   measurement,
+  description,
 }) => {
   try {
     const { data } = await product.post("/add", {
@@ -21,9 +22,9 @@ export const addProduct = async ({
       price,
       stock,
       measurement,
+      description,
     });
 
-    console.log("Response data:", data);
     return { data };
   } catch (error) {
     console.error("Error in addProduct:", error.message);
@@ -34,7 +35,6 @@ export const addProduct = async ({
 export const getProduct = async () => {
   try {
     const { data } = await product.get("/get");
-    console.log(data);
     return data;
   } catch (error) {
     return error;
@@ -56,10 +56,17 @@ export const updateProduct = async (
   _id,
   { productName, category, price, stock, measurement }
 ) => {
+  console.log(description);
   try {
     const { data } = await product.put("/update", {
       _id,
-      updatedProduct: { productName, category, price, stock, measurement },
+      updatedProduct: {
+        productName,
+        category,
+        price,
+        stock,
+        measurement,
+      },
     });
     return data;
   } catch (error) {

@@ -17,6 +17,7 @@ import BuyProduct from "./pages/BuyProduct";
 import Login from "./pages/Login";
 import Order from "./pages/Order";
 import Cart from "./pages/Cart";
+import Footer from "./components/Footer";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -56,6 +57,7 @@ const App = () => {
         <Route path="/admin/dashboard/stats" element={<Statistics />} />
       </Routes>
       <Login />
+      <Footer />
       <ToastContainer />
     </div>
   );

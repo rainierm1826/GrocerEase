@@ -9,6 +9,7 @@ import user from "../backend/routes/userRoutes.js";
 import product from "../backend/routes/productRoutes.js";
 import cart from "../backend/routes/cartRoutes.js";
 import order from "../backend/routes/orderRoutes.js";
+import sales from "../backend/routes/salesRoutes.js"
 import "./config/googleStrategy.js";
 import "./config/facebookStrategy.js";
 import "./config/localStrategy.js";
@@ -87,6 +88,7 @@ app.use("/cart", cart);
 app.use("/order", order);
 
 // sales routes
+app.use("/sales", sales)
 
 const PORT = process.env.PORT || 5000;
 

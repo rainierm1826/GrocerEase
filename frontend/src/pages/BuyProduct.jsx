@@ -7,6 +7,9 @@ import { checkout } from "../api/order";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { setOpen } from "../features/loginSlice";
+import { FaPlus } from "react-icons/fa";
+import { FaMinus } from "react-icons/fa";
+import { addCart } from "../api/cart";
 
 const BuyProduct = () => {
   const { productId } = useParams();
@@ -28,8 +31,11 @@ const BuyProduct = () => {
     console.log("payment: ", paymentMethod);
   };
 
-  const handleQuantity = (e) => {
-    setQuantity(e.target.value);
+  const addQuantity = () => {
+    setQuantity((prev) => prev + 1);
+  };
+  const subQuantity = () => {
+    setQuantity((prev) => prev - 1);
   };
 
   const totalAmount = data?.product ? quantity * data.product.price : 0;
@@ -81,6 +87,39 @@ const BuyProduct = () => {
     });
   };
 
+  const addCartMutation = useMutation({
+    mutationFn: addCart,
+    onSuccess: () => {
+      toast.success("Add To Cart Successfully");
+    },
+    onError: () => {
+      toast.error("Can't Add To Cart");
+    },
+  });
+
+  const handleAddCart = () => {
+    if (!userInfo) {
+      dispatch(setOpen(true));
+      return;
+    }
+
+    if (quantity > data.product.stock) {
+      toast.error("Not enough stocks");
+      return;
+    }
+    if (!paymentMethod) {
+      toast.error("Choose payment method");
+      return;
+    }
+
+    addCartMutation.mutate({
+      userId: userInfo.user._id,
+      productId,
+      quantity,
+      paymentMethod,
+    });
+  };
+
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-screen w-full">
@@ -90,18 +129,40 @@ const BuyProduct = () => {
   }
 
   return (
-    <div className="container py-2 px-5">
-      <div className="grid grid-cols-5 gap-5">
-        <div className="col-span-2 flex justify-center items-center p-5 shadow-md">
-          <img src={data.product.image} alt="" className="h-96" />
+    <div className="container py-10 px-5">
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-10">
+        <div className="col-span-1 md:col-span-2">
+          <div className="flex justify-center items-center shadow-md p-5 ">
+            <img src={data.product.image} alt="" className="h-56" />
+          </div>
+          <p className="text-xl font-bold mt-5 text-primaryBlue">
+            Product Specifications
+          </p>
+          <div className="grid grid-cols-2 w-3/4">
+            <p className="text-primaryGray font-semibold">Category: </p>
+            <p className="font-semibold">{data.product.category}</p>
+          </div>
+          <div className="grid grid-cols-2 w-3/4">
+            <p className="text-primaryGray font-semibold">Stock: </p>
+            <p className="font-semibold">{data.product.stock}</p>
+          </div>
+          <div className="grid grid-cols-2 w-3/4">
+            <p className="text-primaryGray font-semibold">Measurement: </p>
+            <p className="font-semibold">{data.product.measurement}</p>
+          </div>
+
+          <p className="text-xl font-bold mt-5 text-primaryBlue">
+            Product Description
+          </p>
+          <p className="line-clamp-3">{data.product.description}</p>
         </div>
-        <div className="col-span-3">
-          <h3>{data.product.productName}</h3>
-          <p>{`₱ ${data.product.price}`}</p>
-          <p>{data.product.category}</p>
-          <p>{data.product.description}</p>
-          <p>{data.product.stock}</p>
+        <div className="col-span-1 md:col-span-3">
+          <h3 className="text-2xl font-bold">
+            {data.product.productName} {data.product.measurement}
+          </h3>
+          <p className="border rounded mt-5 p-2 text-primaryBlue text-lg font-bold">{`₱ ${data.product.price}`}</p>
           <select
+            className="shadow-md p-2 mt-2 text-primaryBlue text-lg font-bold w-full md:w-1/2"
             name=""
             id=""
             onChange={(e) => handlePaymentMethod(e)}
@@ -112,24 +173,51 @@ const BuyProduct = () => {
             </option>
             <option value="cod">COD</option>
           </select>
-          <div className="flex flex-col">
-            <label className="font-bold mb-2">Quantity</label>
-            <input
-              type="number"
-              className="rounded-md  text-xs shadow-md p-2 border border-gray-300"
-              placeholder="e.g. 100"
-              name="quantity"
-              onChange={(e) => handleQuantity(e)}
-              max={data.product.stock}
-              min={1}
-              value={quantity}
-            />
+
+          <div className="grid grid-cols-2 w-full mt-5 md:w-1/2">
+            <p className="text-primaryGray font-semibold p-2">Quantity: </p>
+            <div className="flex">
+              <button
+                className="border border-primaryBlue text-sm p-3"
+                onClick={() => subQuantity()}
+              >
+                <FaMinus />
+              </button>
+              <input
+                type="text"
+                className="focus:outline-none border-y w-full border-primaryBlue text-center text-primaryBlue"
+                value={quantity}
+                readOnly
+              />
+
+              <button
+                className="border border-primaryBlue text-sm p-3"
+                onClick={() => addQuantity()}
+              >
+                <FaPlus />
+              </button>
+            </div>
           </div>
-          <p>Total Amount: {totalAmount}</p>
-          <button onClick={() => handleCheckout(data.product._id)}>
-            Buy Now
-          </button>
-          <button>Add to Cart</button>
+          <div className="grid grid-cols-2 w-full mt-5 md:w-1/2">
+            <p className="text-primaryGray font-semibold p-2">Total Amount: </p>
+            <p className="border border-primaryBlue p-2 text-center text-primaryBlue">
+              ₱ {totalAmount}
+            </p>
+          </div>
+          <div className="mt-10 w-full flex justify-center gap-5">
+            <button
+              className="bg-primaryWhite border border-primaryBlue px-10 py-2 rounded font-bold"
+              onClick={() => handleAddCart()}
+            >
+              Add To Cart
+            </button>
+            <button
+              onClick={() => handleCheckout(data.product._id)}
+              className="bg-primaryBlue text-primaryWhite px-10 py-2 rounded font-bold"
+            >
+              Buy Now
+            </button>
+          </div>
         </div>
       </div>
     </div>

@@ -5,7 +5,7 @@ import HeroProductCards from "../components/HeroProductCards";
 import heroImage from "../assets/heroImage.png";
 import Login from "../pages/Login";
 import { useSelector, useDispatch } from "react-redux";
-import { RotateLoader } from "react-spinners";
+import { PulseLoader } from "react-spinners";
 import { useQuery } from "@tanstack/react-query";
 import { getUserProducts } from "../api/product";
 
@@ -17,14 +17,6 @@ const Hero = () => {
     ["userProduct"],
     getUserProducts
   );
-
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <RotateLoader color="#fffffe" size={15} />
-      </div>
-    );
-  }
 
   if (isError) {
     return <div className="text-red-500">Error fetching products!</div>;
@@ -48,7 +40,7 @@ const Hero = () => {
             <h1 className="text-xl text-white font-bold font-sans mt-10 px-5 w-2/3 md:text-4xl md:w-full">
               Welcome To GrocerEase
               {loading ? (
-                <RotateLoader
+                <PulseLoader
                   color="#fffffe"
                   size={15}
                   className="ml-10 text-xs"
@@ -65,23 +57,31 @@ const Hero = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 py-3 px-7 -mt-14 gap-5 container lg:grid-cols-3 lg:-mt-14 md:grid-cols-2 md:px-10 md:-mt-4 sm:grid-cols-1 sm:px-16">
-        <HeroCards />
-        <HeroCards />
-        <HeroCards />
-      </div>
+      {isLoading ? (
+        <div className="flex justify-center items-center h-screen">
+          <PulseLoader color="#0cc0df" size={15} />
+        </div>
+      ) : (
+        <>
+          <div className="grid grid-cols-1 py-3 px-7 -mt-14 gap-5 container lg:grid-cols-3 lg:-mt-14 md:grid-cols-2 md:px-10 md:-mt-4 sm:grid-cols-1 sm:px-16">
+            <HeroCards />
+            <HeroCards />
+            <HeroCards />
+          </div>
 
-      <div className="container grid grid-cols-2 gap-5 py-3 px-5 md:grid-cols-6">
-        {products.map((product) => (
-          <HeroProductCards
-            key={product._id}
-            productName={product.productName}
-            image={product.image}
-            price={product.price}
-            _id={product._id}
-          />
-        ))}
-      </div>
+          <div className="container grid grid-cols-2 gap-5 py-3 px-5 md:grid-cols-4 lg:grid-cols-6">
+            {products.map((product) => (
+              <HeroProductCards
+                key={product._id}
+                productName={product.productName}
+                image={product.image}
+                price={product.price}
+                _id={product._id}
+              />
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 };
