@@ -30,17 +30,22 @@ export const getProduct = async (req, res) => {
 // filter products
 export const filterProducts = async (req, res) => {
   try {
-    const { category } = req.params;
-    const product = await Product.find({ category });
+    const { productName } = req.params;
+    const product = await Product.find({ productName });
 
-    if (!product)
-      return res.status(400).json({ status: false, message: "no product" });
+    if (product.length === 0) {
+      return res
+        .status(200)
+        .json({ status: true, message: "No products found", product: [] });
+    }
 
     return res.status(200).json({ status: true, product });
   } catch (error) {
-    return res
-      .status(500)
-      .json({ status: false, message: "internal error", error: error.message });
+    return res.status(500).json({
+      status: false,
+      message: "internal shittt",
+      error: error.message,
+    });
   }
 };
 
@@ -124,5 +129,3 @@ export const deleteProduct = async (req, res) => {
     return res.status(500).json({ status: false, message: "internal error" });
   }
 };
-
-

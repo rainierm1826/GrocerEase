@@ -72,8 +72,8 @@ const BuyProduct = () => {
       return;
     }
 
-    if (totalAmount < 70) {
-      toast.error("Minimum order of ₱ 70");
+    if (totalAmount <= 200) {
+      toast.error("Minimum order of ₱ 200");
       return;
     }
 

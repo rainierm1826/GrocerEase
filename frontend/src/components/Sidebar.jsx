@@ -63,8 +63,9 @@ const Sidebar = () => {
 
         <button
           className={` flex items-center gap-2 p-2  rounded-md mr-10  ${
-            location.pathname === "/profile" && "bg-gray-100"
+            location.pathname === "/user/profile" && "bg-gray-100"
           } hover:bg-gray-100 transition-colors ease-in duration-150`}
+          onClick={() => navigate("/user/profile")}
         >
           <RxAvatar className="text-primaryBlue" />
           <p className="w-full flex justify-center items-center font-bold">

@@ -46,14 +46,6 @@ const Login = () => {
             <img src={facebookIcon} alt="" className="w-5 h-5" />
             <p className="font-bold text-center w-full">Facebook</p>
           </button>
-          <div className="flex flex-col items-center">
-            <p className="text-sm font-medium">
-              By signing in, you agree to GrocerEase’s
-            </p>
-            <p className="text-sm font-medium text-primaryBlue">
-              Terms of Service & Privacy Policy
-            </p>
-          </div>
         </div>
       </div>
     </div>

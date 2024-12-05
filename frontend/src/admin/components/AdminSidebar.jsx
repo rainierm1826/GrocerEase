@@ -63,7 +63,10 @@ const AdminSidebar = () => {
             Orders
           </p>
         </button>
-        <button className=" flex items-center gap-2 p-2  rounded-md mr-10 hover:bg-gray-100 transition-colors ease-in duration-150">
+        <button
+          className=" flex items-center gap-2 p-2  rounded-md mr-10 hover:bg-gray-100 transition-colors ease-in duration-150"
+          onClick={() => navigate("/admin/login")}
+        >
           <MdLogout className="text-primaryBlue" />
           <p className="w-full flex justify-center items-center font-bold">
             Logout

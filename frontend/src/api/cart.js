@@ -11,7 +11,6 @@ export const addCart = async ({
   quantity,
   paymentMethod,
 }) => {
-  console.log(productId);
   try {
     const { data } = await cart.post("/add", {
       userId,
@@ -26,9 +25,7 @@ export const addCart = async ({
     return data;
   } catch (error) {
     console.error(error.response?.data || error.message);
-    return (
-      error.response?.data || { status: false, message: "An error occurred" }
-    );
+    return error.message;
   }
 };
 
@@ -42,11 +39,10 @@ export const viewCart = async ({ userId }) => {
   }
 };
 
-export const checkOutFromCart = async ({ userId, products, totalAmount }) => {
+export const checkoutFromCart = async ({ userId, products, totalAmount }) => {
   try {
     const productsToSend = products.map((product) => {
       const { productId, quantity, purchaseAtPrice, paymentMethod } = product;
-
       return {
         productId,
         quantity,
@@ -61,10 +57,31 @@ export const checkOutFromCart = async ({ userId, products, totalAmount }) => {
       products: productsToSend,
       totalAmount,
     });
-
     return data;
   } catch (error) {
-    console.error("Checkout Error:", error.response?.data || error.message);
+    console.log(error.message);
+    return error;
+  }
+};
+
+export const deleteCart = async ({ userId, productId }) => {
+  console.log(userId, productId);
+  try {
+    const { data } = await cart.delete("/deleteCart", {
+      data: { userId, productId },
+    });
+    return data;
+  } catch (error) {
+    return error;
+  }
+};
+
+export const editCart = async ({ userId, productId, quantity }) => {
+  console.log(quantity)
+  try {
+    const { data } = cart.post("/updateCart", { userId, productId, quantity });
+    return data;
+  } catch (error) {
     return error;
   }
 };

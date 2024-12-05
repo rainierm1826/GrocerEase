@@ -1,16 +1,21 @@
 import Cart from "../models/cartModel.js";
 import Order from "../models/orderModel.js";
 import Product from "../models/productModel.js";
+import User from "../models/userModel.js";
+import mongoose from "mongoose";
 
 // add to cart
 export const addToCart = async (req, res) => {
   try {
     const { userId, products } = req.body;
-    console.log(products);
 
     const quantity = products[0]?.quantity;
     const productId = products[0]?.productId;
     const paymentMethod = products[0]?.paymentMethod;
+
+    if (!paymentMethod) {
+      return "no payment method";
+    }
 
     let userCart = await Cart.findOne({ user: userId });
 
@@ -25,7 +30,6 @@ export const addToCart = async (req, res) => {
       );
 
       if (productIndex > -1) {
-        // Update quantity of an existing product
         userCart.products[productIndex].quantity += quantity;
       } else {
         // Add a new product
@@ -39,6 +43,7 @@ export const addToCart = async (req, res) => {
       .status(200)
       .json({ status: true, message: "Cart updated successfully" });
   } catch (error) {
+    console.log(error.message);
     return res.status(500).json({
       status: false,
       message: "Internal error",
@@ -74,58 +79,147 @@ export const viewCart = async (req, res) => {
   }
 };
 
+// checkout
 export const checkoutCart = async (req, res) => {
+  const { userId, products, totalAmount } = req.body;
+
   try {
-    const { userId, products, totalAmount } = req.body;
-    const quantity = products[0]?.quantity;
-    const purchaseAtPrice = products[0]?.purchaseAtPrice;
-    const total = products[0]?.total;
-    const productId = products[0]?.productId;
+    const cart = await Cart.findOne({ user: userId });
 
-    const product = await Product.findById(productId);
-
-    if (!product) {
-      return res
-        .status(404)
-        .json({ status: false, message: "Product not found", id: productId });
+    if (!cart) {
+      return res.status(400).json({ message: "Cart not found" });
     }
 
-    // Check stock availability
-    if (product.stock < quantity) {
-      return res.status(400).json({
+    for (const product of products) {
+      const productInDb = await Product.findById(product.productId);
+
+      if (!productInDb) {
+        return res
+          .status(400)
+          .json({ message: "Product not found: " + product.productId });
+      }
+
+      if (productInDb.stock < product.quantity) {
+        return res.status(400).json({
+          message: `Not enough stock for product: ${product.productId}`,
+        });
+      }
+
+      productInDb.stock -= product.quantity;
+
+      const productInCart = cart.products.find(
+        (cartProduct) => cartProduct.productId.toString() === product.productId
+      );
+
+      if (productInCart) {
+        productInCart.quantity -= product.quantity;
+
+        if (productInCart.quantity <= 0) {
+          cart.products = cart.products.filter(
+            (item) => item.productId.toString() !== product.productId
+          );
+        }
+      } else {
+        return res.status(400).json({
+          message: `Product ${product.productId} not found in cart`,
+        });
+      }
+
+      await productInDb.save();
+    }
+
+    await cart.save();
+
+    const newOrder = new Order({
+      user: userId,
+      products: products.map((product) => ({
+        productId: new mongoose.Types.ObjectId(product.productId),
+        quantity: product.quantity,
+        purchaseAtPrice: product.purchaseAtPrice,
+        total: product.total,
+      })),
+      totalAmount,
+      paymentMethod: "cod",
+    });
+
+    await newOrder.save();
+  } catch (error) {
+    console.error(error.message);
+    return res.status(500).json({
+      status: false,
+      message: "Internal error",
+      error: error.message,
+    });
+  }
+};
+
+// edit quantity of cart
+export const editCart = async (req, res) => {
+  try {
+    const { userId, productId, quantity } = req.body;
+
+    const cart = await Cart.findOne({ user: userId });
+
+    if (!cart) {
+      return res.status(404).json({ message: "Cart not found for this user" });
+    }
+    const productInCart = cart.products.find(
+      (product) => product.productId.toString() === productId
+    );
+
+    if (!productInCart) {
+      return res.status(404).json({ message: "Product not found in cart" });
+    }
+    productInCart.quantity = quantity;
+
+    await cart.save();
+    return res.status(200).json({ status: true, cart });
+  } catch (error) {
+    return res.status(500).json({
+      status: false,
+      message: "Internal error",
+      error: error.message,
+    });
+  }
+};
+
+export const deleteCart = async (req, res) => {
+  try {
+    const { userId, productId } = req.body;
+    // Find the user's cart
+    const cart = await Cart.findOne({ user: userId });
+
+    if (!cart) {
+      return res.status(404).json({
         status: false,
-        message: `Insufficient stock. Available: ${product.stock}`,
+        message: "Cart not found for this user",
       });
     }
 
-    const checkOutOrder = new Order({
-      user: userId,
-      products: [
-        {
-          productId,
-          quantity,
-          purchaseAtPrice,
-          total,
-        },
-      ],
-      totalAmount,
+    const updatedProducts = cart.products.filter(
+      (product) => product.productId.toString() !== productId
+    );
 
-      paymentMethod,
-    });
-    await checkOutOrder.save();
+    if (updatedProducts.length === cart.products.length) {
+      return res.status(404).json({
+        status: false,
+        message: "Product not found in the cart",
+      });
+    }
 
-    product.stock -= quantity;
-    await product.save();
+    cart.products = updatedProducts;
+
+    await cart.save();
 
     return res.status(200).json({
       status: true,
-      message: "Checkout Successfully",
-      order: checkOutOrder,
+      message: "Product removed from cart",
+      cart,
     });
   } catch (error) {
     return res.status(500).json({
       status: false,
-      message: "internal error",
+      message: "Internal error",
       error: error.message,
     });
   }

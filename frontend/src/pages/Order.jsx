@@ -18,7 +18,6 @@ const Order = () => {
   const [orders, setOrders] = useState([]);
   const dispatch = useDispatch();
 
-  // Redirect to home if userInfo is missing
   useEffect(() => {
     if (!userInfo) {
       navigate("/");
@@ -32,7 +31,7 @@ const Order = () => {
   const viewOrderMutation = useMutation({
     mutationFn: viewOrder,
     onSuccess: (data) => {
-      setOrders(data.order || []); // Update orders state with fetched data
+      setOrders(data.order || []);
     },
     onError: () => {
       toast.error("Failed to view order");
@@ -95,12 +94,12 @@ const Order = () => {
               </thead>
               <tbody>
                 {orders.map((order) => (
-                  <tr
-                    key={order._id}
-                    className="border-[1px] border-primaryBlue hover:bg-gray-100"
-                  >
+                  <React.Fragment key={order._id}>
                     {order.products.map((product) => (
-                      <React.Fragment key={product.productId?._id}>
+                      <tr
+                        key={product.productId?._id}
+                        className="border-[1px] border-primaryBlue hover:bg-gray-100"
+                      >
                         {product.productId === null ? (
                           <>
                             <td className="flex justify-center p-2">
@@ -114,13 +113,16 @@ const Order = () => {
                               Product not available
                             </td>
                             <td className="text-xs text-center text-red-500">
-                              ₱ N/A
+                              Product not available
                             </td>
                             <td className="text-xs text-center text-red-500">
-                              N/A
+                              Product not available
                             </td>
                             <td className="text-xs text-center text-red-500">
-                              N/A
+                              Product not available
+                            </td>
+                            <td className="text-xs text-center text-red-500">
+                              Product not available
                             </td>
                           </>
                         ) : (
@@ -138,36 +140,37 @@ const Order = () => {
                             <td className="text-xs text-center">
                               ₱ {product.productId.price}
                             </td>
-                            {console.log(order)}
                             <td className="text-xs text-center">
                               {product.quantity}
                             </td>
                             <td className="text-xs text-center">
-                              {product.total}
+                              ₱ {product.total}
                             </td>
                             <td className="text-xs text-center">
-                              <span className="flex justify-center items-center gap-2">
-                                <LuDot
-                                  className={`${
-                                    order.status === "pending"
-                                      ? "text-gray-500"
-                                      : order.status === "cancel"
-                                      ? "text-red-500"
-                                      : order.status === "on delivery"
-                                      ? "text-green-500"
-                                      : "text-green-500"
-                                  } text-4xl`}
-                                />
+                              <span
+                                className={`font-bold py-1 px-5 rounded-full w-24 whitespace-nowrap ${
+                                  order.status === "pending"
+                                    ? "bg-gray-200 text-gray-700"
+                                    : order.status === "onDelivery"
+                                    ? "bg-yellow-200 text-yellow-700"
+                                    : order.status === "cancel"
+                                    ? "bg-red-200 text-red-700"
+                                    : order.status === "received"
+                                    ? "bg-green-200 text-green-700"
+                                    : ""
+                                }`}
+                              >
                                 {order.status === "pending" && "Pending"}
+                                {order.status === "received" && "Received"}
                                 {order.status === "onDelivery" && "On Delivery"}
                                 {order.status === "cancel" && "Cancelled"}
                               </span>
                             </td>
                           </>
                         )}
-                      </React.Fragment>
+                      </tr>
                     ))}
-                  </tr>
+                  </React.Fragment>
                 ))}
               </tbody>
             </table>

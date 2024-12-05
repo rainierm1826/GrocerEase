@@ -63,18 +63,27 @@ export const checkout = async (req, res) => {
 export const getOrder = async (req, res) => {
   try {
     const { userId } = req.body;
+
+    // Fetch orders for the user and populate each productId in the products array
     const order = await Order.find({ user: userId })
-      .populate("products.productId")
+      .populate({
+        path: "products.productId", // Specify the path to the productId field inside the products array
+        model: "Product", // Explicitly specify the model for population
+      })
       .sort({ createdAt: -1 })
       .exec();
-    if (!order) {
+
+    // If no orders are found, return a 404
+    if (!order || order.length === 0) {
       return res
         .status(404)
         .json({ status: false, message: "Order not found" });
     }
 
+    // Return the orders
     return res.status(200).json({ status: true, order });
   } catch (error) {
+    // Handle errors
     return res.status(500).json({
       status: false,
       message: "Internal error",

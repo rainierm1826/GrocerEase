@@ -19,6 +19,7 @@ export const loginAdmin = async (email, password) => {
     return data;
   } catch (error) {
     console.log(error);
+    return error
   }
 };
 

@@ -93,14 +93,6 @@ const ProductList = () => {
     );
   }
 
-  // if (!data?.products?.length) {
-  //   return (
-  //     <div className="flex justify-center items-center h-screen w-full">
-  //       <div>No products available</div>
-  //     </div>
-  //   );
-  // }
-
   const filteredProducts = data.products.filter((product) =>
     product.productName.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -111,19 +103,19 @@ const ProductList = () => {
         <div className="flex justify-between items-center mb-5">
           <div className="relative flex items-center w-full max-w-[60%] shadow-md rounded-full lg:max-w-xs">
             <input
-              className="border-2 border-black w-full h-8 focus:outline-none rounded-full p-2 text-primaryGray md:h-full"
+              className="border-2 border-primaryBlue w-full h-8 focus:outline-none rounded-full p-2 text-primaryGray md:h-full"
               type="text"
               placeholder="Search..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
-            <button className="absolute inset-y-0 right-0 flex items-center text-primaryWhite border-y-2 border-right-2 border-black bg-primaryBlue text-sm py-1 px-5 rounded-full">
+            <button className="absolute inset-y-0 right-0 flex items-center text-primaryBlue text-sm py-1 px-5 rounded-full">
               <FaSearch />
             </button>
           </div>
           <button
             type="button"
-            className="p-2 rounded-full bg-primaryBlue text-primaryWhite text-2xl border-2 border-black"
+            className="rounded-full bg-primaryBlue text-primaryWhite p-1 text-3xl"
             onClick={() => handleAddProduct()}
           >
             <GoPlus />

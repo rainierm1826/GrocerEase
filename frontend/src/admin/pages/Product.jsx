@@ -17,7 +17,7 @@ const Product = () => {
           !isAddProductOpen ? "hidden" : "fixed"
         } inset-0 bg-black bg-opacity-70 flex justify-center items-center z-20`}
       >
-        <div className="rounded-lg shadow-lg ">
+        <div className="rounded-lg shadow-lg">
           <AddProduct />
         </div>
       </div>

@@ -5,17 +5,20 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { openSidebar } from "../features/sidebarSlice";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { checkOutFromCart, viewCart } from "../api/cart";
+import { viewCart, deleteCart, editCart } from "../api/cart";
+import { checkoutFromCart } from "../api/cart";
 import { PulseLoader } from "react-spinners";
 import { toast } from "react-toastify";
+import { AiFillEdit } from "react-icons/ai";
+import { MdDelete } from "react-icons/md";
 
 const Cart = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const queryClient = useQueryClient();
   const [cart, setCart] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
   const [total, setTotal] = useState(0);
+  const [quantities, setQuantities] = useState({});
   const userInfo = useSelector((state) => state.user.user);
   const isSidebarOpen = useSelector((state) => state.sidebar.open);
 
@@ -33,6 +36,12 @@ const Cart = () => {
     mutationFn: viewCart,
     onSuccess: (data) => {
       setCart(data.cart || []);
+      // Initialize quantities state
+      const initialQuantities = {};
+      data.cart?.forEach((item) => {
+        initialQuantities[item._id] = item.quantity;
+      });
+      setQuantities(initialQuantities);
     },
     onError: () => {
       toast.error("Failed to view order");
@@ -56,7 +65,7 @@ const Cart = () => {
   const handleSelectAll = (event) => {
     if (event.target.checked) {
       const allItemDetails = cart.map((item) => ({
-        id: item._id,
+        id: item.productId._id,
         quantity: item.quantity,
         price: item.productId?.price || 0,
         paymentMethod: item.paymentMethod || "COD",
@@ -69,15 +78,17 @@ const Cart = () => {
 
   const handleCheckboxChange = (item) => {
     setSelectedItems((prev) => {
-      const exists = prev.find((selected) => selected.id === item._id);
+      const exists = prev.find(
+        (selected) => selected.id === item.productId._id
+      );
 
       if (exists) {
-        return prev.filter((selected) => selected.id !== item._id);
+        return prev.filter((selected) => selected.id !== item.productId._id);
       } else {
         return [
           ...prev,
           {
-            id: item._id,
+            id: item.productId._id,
             quantity: item.quantity,
             price: item.productId?.price || 0,
             paymentMethod: item.paymentMethod || "COD",
@@ -89,34 +100,100 @@ const Cart = () => {
 
   const isAllSelected = selectedItems.length === cart.length;
 
+  const handleQuantityChange = (cartItemId, newQuantity) => {
+    const cartItem = cart.find((item) => item._id === cartItemId);
+
+    if (cartItem) {
+      // Update the local state
+      setCart((prevCart) =>
+        prevCart.map((item) =>
+          item._id === cartItemId
+            ? { ...item, quantity: Number(newQuantity) }
+            : item
+        )
+      );
+    }
+  };
+
   const checkoutMutation = useMutation({
-    mutationFn: checkOutFromCart,
-    onSuccess: () => {
-      toast.success("Checkout Successfully");
-    },
+    mutationFn: checkoutFromCart,
+    onSuccess: () => {},
     onError: () => {
       toast.error("Checkout Unsuccessfully");
     },
   });
 
   const handleCheckout = () => {
-    if (total < 70) {
-      toast.error("Minimum order of ₱ 70");
+    if (total <= 200) {
+      toast.error("Minimum order of ₱ 200");
       return;
     }
-
-    const products = selectedItems.map((item) => ({
-      productId: item.id,
-      quantity: item.quantity,
-      purchaseAtPrice: item.price,
-      total: item.quantity * item.price,
-    }));
 
     checkoutMutation.mutate({
       userId: userInfo.user._id,
       totalAmount: total,
-      products: products,
+      products: selectedItems.map((item) => ({
+        productId: item.id,
+        quantity: item.quantity,
+        purchaseAtPrice: item.price,
+        total: item.quantity * item.price,
+        paymentMethod: selectedItems[0]?.paymentMethod || "COD",
+      })),
     });
+    toast.success("Checkout Successfully");
+    viewCartMutation.mutate({ userId: userInfo.user._id });
+  };
+
+  const deleteCartMutation = useMutation({
+    mutationFn: deleteCart,
+    onSuccess: () => {
+      toast.success("Deleted Successfully");
+      viewCartMutation.mutate({ userId: userInfo.user._id });
+    },
+    onError: () => {
+      toast.error("Deleted Unsuccessfully");
+    },
+  });
+
+  const handleDelete = (productId) => {
+    deleteCartMutation.mutate({
+      userId: userInfo.user._id,
+      productId,
+    });
+  };
+
+  const updateCartMutation = useMutation({
+    mutationFn: editCart,
+    onSuccess: (updatedCart) => {
+      viewCartMutation.mutate({ userId: userInfo.user._id });
+      toast.success("Updated Successfully");
+    },
+    onError: () => {
+      toast.error("Update Unsuccessful");
+    },
+  });
+
+  const handleUpdate = (productId) => {
+    console.log("productId:", productId);
+    console.log(
+      "cart item:",
+      cart.find((item) => item.productId._id === productId)
+    );
+
+    const cartItem = cart.find((item) => item.productId._id === productId);
+    const quantity = cartItem ? cartItem.quantity : null;
+
+    console.log("quantity:", quantity);
+
+    if (quantity !== null) {
+      updateCartMutation.mutate({
+        productId,
+        quantity,
+        userId: userInfo.user._id,
+      });
+    } else {
+      toast.error("Unable to find item quantity");
+    }
   };
 
   if (viewCartMutation.isLoading) {
@@ -126,6 +203,7 @@ const Cart = () => {
       </div>
     );
   }
+
   return (
     <div className=" relative">
       <div className="grid grid-cols-4 container">
@@ -150,12 +228,14 @@ const Cart = () => {
             </button>
           </div>
           {cart.length === 0 ? (
-            <p className="text-center text-lg">No orders found</p>
+            <p className="text-center text-lg w-full text-primaryBlue font-bold">
+              No Items in Cart
+            </p>
           ) : (
-            <table className="w-full">
+            <table className="w-full overflow-x-auto">
               <thead>
                 <tr className="bg-primaryBlue text-primaryWhite">
-                  <th className="text-center py-2 flex items-center justify-center gap-2">
+                  <th className="text-center p-2 flex items-center justify-center gap-2">
                     <input
                       type="checkbox"
                       name=""
@@ -164,13 +244,17 @@ const Cart = () => {
                       checked={isAllSelected}
                       onChange={handleSelectAll}
                     />
-                    <span>Select All</span>
+                    <span className="whitespace-nowrap">Select All</span>
                   </th>
-                  <th className="text-center py-2">Image</th>
-                  <th className="text-center py-2">Name</th>
-                  <th className="text-center py-2">Payment Method</th>
-                  <th className="text-center py-2">Quantity</th>
-                  <th className="text-center py-2">Price</th>
+                  <th className="text-center p-2 whitespace-nowrap">Image</th>
+                  <th className="text-center p-2">Name</th>
+                  <th className="text-center p-2 whitespace-nowrap">
+                    Payment Method
+                  </th>
+                  <th className="text-center p-2">Stocks</th>
+                  <th className="text-center p-2">Quantity</th>
+                  <th className="text-center p-2">Price</th>
+                  <th className="text-center p-2">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -191,7 +275,7 @@ const Cart = () => {
                             className="h-4 w-4"
                             value={item._id}
                             checked={selectedItems.some(
-                              (selected) => selected.id === item._id
+                              (selected) => selected.id === item.productId._id
                             )}
                             onChange={() => handleCheckboxChange(item)}
                           />
@@ -209,9 +293,42 @@ const Cart = () => {
                         <td className="text-xs text-center">
                           {item.paymentMethod}
                         </td>
-                        <td className="text-xs text-center">{item.quantity}</td>
+                        <td className="text-xs text-center">
+                          {item.productId.stock}
+                        </td>
+                        <td className="text-xs text-center">
+                          <input
+                            type="number"
+                            name="quantity"
+                            className="shadow-md p-1 text-xs rounded-md w-12 placeholder:text-black"
+                            value={
+                              quantities[item.productId._id] || item.quantity
+                            }
+                            onChange={(e) =>
+                              handleQuantityChange(item._id, e.target.value)
+                            }
+                          />
+                        </td>
                         <td className="text-xs text-center">
                           ₱ {item.productId.price}
+                        </td>
+                        <td className="flex justify-center">
+                          <div className="flex items-center gap-2">
+                            <button
+                              type="button"
+                              className="bg-primaryBlue text-primaryWhite rounded-md px-3 py-1 shadow-md hover:opacity-80 disabled:opacity-50"
+                              onClick={() => handleUpdate(item.productId._id)}
+                            >
+                              <AiFillEdit />
+                            </button>
+                            <button
+                              type="button"
+                              className="bg-red-700 text-primaryWhite rounded-md px-3 py-1 shadow-md hover:opacity-80 disabled:opacity-50"
+                              onClick={() => handleDelete(item.productId._id)}
+                            >
+                              <MdDelete />
+                            </button>
+                          </div>
                         </td>
                       </>
                     )}
@@ -223,13 +340,13 @@ const Cart = () => {
                   <td className="font-bold text-primaryBlue text-center">
                     Total:
                   </td>
-                  <td colSpan={4}></td>
+                  <td colSpan={6}></td>
                   <td className="text-xs text-center font-bold">
                     ₱ {total.toFixed(2)}
                   </td>
                 </tr>
                 <tr>
-                  <td colSpan={6} className="text-end">
+                  <td colSpan={8} className="text-end">
                     <button
                       type="button"
                       className="text-md font-bold py-2 px-5 bg-primaryBlue text-primaryWhite rounded"

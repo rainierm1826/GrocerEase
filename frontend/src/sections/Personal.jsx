@@ -149,21 +149,7 @@ const Personal = () => {
   };
 
   return (
-    <form>
-      <div className="flex justify-between items-center">
-        <h4 className="font-bold text-2xl text-primaryBlue">
-          Personal Information
-        </h4>
-        <button
-          type="button"
-          className="text-2xl text-primaryBlue md:hidden"
-          onClick={() => dispatch(openSidebar(true))}
-        >
-          <IoMenu />
-        </button>
-      </div>
-
-      <hr className="my-5" />
+    <form className=" w-full">
       <div className="flex justify-center flex-col">
         <div className="flex justify-center">
           <ProfileImage w={16} h={16} />
@@ -189,10 +175,6 @@ const Personal = () => {
             </div>
           ))}
         </div>
-
-        <h4 className="font-bold text-2xl mt-5 text-primaryBlue">
-          Contact Details
-        </h4>
         <hr className="my-5" />
         <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
           {contactFields.map((value) => (

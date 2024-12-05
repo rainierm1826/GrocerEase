@@ -100,25 +100,29 @@ const Statistics = () => {
             </div>
 
             {/* Status Count */}
-            {statusesCount.map((count, index) => (
-              <div
-                key={index}
-                className="relative shadow-md h-24 border-2 border-primaryBlue rounded-md flex justify-center items-center"
-              >
-                <span className="absolute top-1 left-1 text-xs font-bold">
-                  {count._id === "onDelivery"
-                    ? "On Delivery"
-                    : count._id === "pending"
-                    ? "Pending"
-                    : count._id === "cancel"
-                    ? "Cancel"
-                    : "Product Deleted"}
-                </span>
-                <p className="text-2xl text-primaryBlue font-bold">
-                  {count.count || 0}
-                </p>
-              </div>
-            ))}
+            {statusesCount
+              .filter((count) => count && count._id) // Exclude null or undefined items and ensure `_id` exists
+              .map((count, index) => (
+                <div
+                  key={index}
+                  className="relative shadow-md h-24 border-2 border-primaryBlue rounded-md flex justify-center items-center"
+                >
+                  <span className="absolute top-1 left-1 text-xs font-bold">
+                    {count._id === "onDelivery"
+                      ? "On Delivery"
+                      : count._id === "pending"
+                      ? "Pending Orders"
+                      : count._id === "cancel"
+                      ? "Cancelled Orders"
+                      : count._id === "received"
+                      ? "Received Orders"
+                      : "Deleted Products"}
+                  </span>
+                  <p className="text-2xl text-primaryBlue font-bold">
+                    {count.count || 0}
+                  </p>
+                </div>
+              ))}
           </div>
 
           {isSalesByDayLoading && (

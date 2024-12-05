@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import AdminNavbar from "../components/AdminNavbar";
 import AdminSidebar from "../components/AdminSidebar";
 import Header from "../components/Header";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getOrders, updateOrderStatus } from "../api/order";
 import { TiCancel } from "react-icons/ti";
 import { AiFillEdit } from "react-icons/ai";
@@ -12,6 +12,7 @@ import { toast } from "react-toastify";
 const Order = () => {
   const { data, isLoading } = useQuery(["orders"], getOrders);
   const [orderStatuses, setOrderStatuses] = useState(new Map());
+  const queryClient = useQueryClient();
 
   if (data && data.orders) {
     console.log(data.orders);
@@ -38,6 +39,7 @@ const Order = () => {
     },
     onSuccess: () => {
       toast.success("Status Updated Successfully");
+      queryClient.invalidateQueries("orders");
     },
   });
 
@@ -62,17 +64,17 @@ const Order = () => {
             </div>
           )}
 
-          <table className="w-full table-auto border-collapse">
+          <table className="w-full table-auto overflow-x-auto">
             <thead>
               <tr className="bg-primaryBlue text-primaryWhite">
-                <th className="text-center py-2">Image</th>
-                <th className="text-center py-2">Buyer</th>
-                <th className="text-center py-2">Products</th>
-                <th className="text-center py-2">Location</th>
-                <th className="text-center py-2">Quantity</th>
-                <th className="text-center py-2">Total</th>
-                <th className="text-center py-2">Status</th>
-                <th className="text-center py-2">Actions</th>
+                <th className="text-center p-2">Image</th>
+                <th className="text-center p-2">Buyer</th>
+                <th className="text-center p-2">Products</th>
+                <th className="text-center p-2">Quantity</th>
+                <th className="text-center p-2">Total</th>
+                <th className="text-center p-2">Location</th>
+                <th className="text-center p-2">Status</th>
+                <th className="text-center p-2">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -82,28 +84,21 @@ const Order = () => {
                   className="hover:bg-gray-100 border border-primaryBlue"
                 >
                   {/* Image Column */}
-                  <td className="flex justify-center p-2">
-                    {order.products.map((product) =>
-                      product.productId ? (
-                        <img
-                          key={product._id}
-                          src={product.productId.image}
-                          alt={product.productId.productName}
-                          className="h-12 w-12 shadow-md object-cover rounded"
-                        />
-                      ) : (
-                        <td
-                          key={product._id}
-                          className="flex justify-center p-2"
-                        >
-                          <img
-                            src=""
-                            alt="not available"
-                            className="h-12 w-12 shadow-md object-cover rounded text-xs"
-                          />
-                        </td>
-                      )
-                    )}
+                  <td className="flex justify-center flex-col p-2 ">
+                    {order.products.map((product) => (
+                      <img
+                        key={product._id}
+                        src={
+                          product.productId?.image ||
+                          "placeholder-image-url.jpg"
+                        } // Placeholder image
+                        alt={
+                          product.productId?.productName ||
+                          "Product not available"
+                        }
+                        className="h-12 w-12 shadow-md object-cover rounded"
+                      />
+                    ))}
                   </td>
 
                   {/* User Name Column */}
@@ -113,38 +108,17 @@ const Order = () => {
 
                   {/* Product Name Column */}
                   <td className="text-xs text-center">
-                    {order.products.map((product) =>
-                      product.productId ? (
-                        <div key={product._id}>
-                          {product.productId.productName}
-                        </div>
-                      ) : (
-                        <td
-                          key={product._id}
-                          className="text-xs text-center text-red-500"
-                        >
-                          <div>Product not available</div>
-                        </td>
-                      )
-                    )}
-                  </td>
-
-                  {/* Location Column */}
-                  <td className="text-xs text-center">
-                    {order.user.location.city &&
-                      `${order.user.location.city}, `}
-                    {order.user.location.province &&
-                      `${order.user.location.province}`}
-                    <br />
-                    {order.user.location.barangay &&
-                      `${order.user.location.barangay}`}
-                    <br />
-                    {order.user.location.street &&
-                      `${order.user.location.street}`}
-                    {order.user.location.blk &&
-                      `Blk ${order.user.location.blk}`}
-                    {order.user.location.lot &&
-                      ` Lot ${order.user.location.lot}`}
+                    {order.products.map((product) => (
+                      <div key={product._id}>
+                        {product.productId ? (
+                          product.productId.productName
+                        ) : (
+                          <span className="text-xs text-red-500">
+                            Product not available
+                          </span>
+                        )}
+                      </div>
+                    ))}
                   </td>
 
                   {/* Quantity Column */}
@@ -169,19 +143,48 @@ const Order = () => {
                     ))}
                   </td>
 
+                  {/* Location Column */}
+                  <td className="text-xs text-center">
+                    {order.user.location.city &&
+                      `${order.user.location.city}, `}
+                    {order.user.location.province &&
+                      `${order.user.location.province}`}
+                    <br />
+                    {order.user.location.barangay &&
+                      `${order.user.location.barangay}`}
+                    <br />
+                    {order.user.location.street &&
+                      `${order.user.location.street}`}
+                    {order.user.location.blk &&
+                      `Blk ${order.user.location.blk}`}
+                    {order.user.location.lot &&
+                      ` Lot ${order.user.location.lot}`}
+                  </td>
+
                   {/* Status Update Column */}
-                  <td className="text-center w-auto">
+                  <td className="text-center w-auto whitespace-nowrap">
                     <select
                       onChange={(e) => handleStatus(order._id, e)}
-                      value={order.status} // Get status for this specific order
-                      className={`rounded-md shadow-md p-2 text-xs w-full max-w-[120px]`}
-                      name="status"
+                      value={orderStatuses.get(order._id) || order.status}
+                      className={`rounded-md shadow-md p-2 text-xs font-bold w-full max-w-[120px] whitespace-nowrap overflow-hidden text-ellipsis ${
+                        order.status === "pending"
+                          ? "bg-gray-200 text-gray-700"
+                          : order.status === "received"
+                          ? "bg-green-200 text-green-700"
+                          : order.status === "cancel"
+                          ? "bg-red-200 text-red-700"
+                          : order.status === "onDelivery"
+                          ? "bg-yellow-200 text-yellow-700"
+                          : ""
+                      }`}
                     >
+                      {/* Options */}
                       <option value="" disabled>
                         Update Status
                       </option>
                       <option value="pending">Pending</option>
                       <option value="onDelivery">On Delivery</option>
+                      <option value="received">Received</option>
                       <option value="cancel">Cancel</option>
                     </select>
                   </td>

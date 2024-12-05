@@ -18,6 +18,7 @@ import Login from "./pages/Login";
 import Order from "./pages/Order";
 import Cart from "./pages/Cart";
 import Footer from "./components/Footer";
+import Profile from "./pages/Profile";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -47,7 +48,7 @@ const App = () => {
 
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/account" element={<Account />} />
+        <Route path="/user/profile" element={<Profile />} />
         <Route path="/user/order" element={<Order />} />
         <Route path="/user/cart" element={<Cart />} />
         <Route path="/admin/login" element={<LoginAdmin />} />
