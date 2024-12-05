@@ -22,8 +22,6 @@ const LoginAdmin = () => {
     const { email, password } = adminCredentials;
     const result = await loginAdmin(email, password);
 
-    console.log(result);
-
     if (result.status === true) {
       return navigate("/admin/dashboard/stats");
     } else {
@@ -35,8 +33,8 @@ const LoginAdmin = () => {
     <div>
       <AdminNavbar />
       <div className="container grid grid-cols-1 py-5 bg-gradient-radial from-[#23c3cb] to-[#137db8] md:grid-cols-2">
-        <div className="mx-5 my-2 rounded-2xl p-5 shadow-lg bg-white/10 backdrop-blur-lg hidden md:block">
-          <p className="font-Fredoka text-3xl font-bold text-primaryBlue">
+        <div className="mx-5 my-2 rounded-2xl p-5 shadow-lg bg-white/10 backdrop-blur-lg hidden md:block ">
+          <p className="font-Fredoka text-3xl font-bold text-primaryWhite">
             The Rice You Need,
             <span className="text-black"> With Ease</span>.
           </p>
@@ -45,12 +43,10 @@ const LoginAdmin = () => {
           </div>
         </div>
         <div className="mx-5 my-2  flex justify-center items-center ">
-          <div className="bg-white/10 backdrop-blur-lg shadow-xl rounded-lg py-10 px-24 flex justify-center items-center flex-col gap-5">
-            <h1 className="text-2xl font-bold text-primaryWhite">
-              Welcome Admin
-            </h1>
+          <div className="bg-primaryWhite shadow-md w-5/6 rounded-lg py-10 px-24 flex justify-center items-center flex-col gap-5 md:w-auto">
+            <h1 className="text-2xl font-bold text-black">Welcome Admin</h1>
             <div className="flex flex-col">
-              <label className="font-bold mb-2 text-primaryWhite">Email</label>
+              <label className="font-bold mb-2 text-black">Email</label>
               <input
                 type="text"
                 className="bg-gray-100 p-2 rounded-full shadow-md"
@@ -61,9 +57,7 @@ const LoginAdmin = () => {
               />
             </div>
             <div className="flex flex-col">
-              <label className="font-bold mb-2 text-primaryWhite">
-                Password
-              </label>
+              <label className="font-bold mb-2 text-black">Password</label>
               <input
                 type="password"
                 className="bg-gray-100 p-2 rounded-full shadow-md "

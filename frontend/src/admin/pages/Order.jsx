@@ -8,6 +8,7 @@ import { TiCancel } from "react-icons/ti";
 import { AiFillEdit } from "react-icons/ai";
 import { PulseLoader } from "react-spinners";
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
 
 const Order = () => {
   const { data, isLoading } = useQuery(["orders"], getOrders);
@@ -49,10 +50,18 @@ const Order = () => {
     updateOrderStatusMutation.mutate({ orderId, status });
   };
 
+  const isAdminSidebarOpen = useSelector((state) => state.adminSidebar.open);
+
   return (
     <div className=" relative">
       <div className="grid grid-cols-4 container">
-        <div className="hidden sticky top-0 lg:block lg:col-span-1 pl-5">
+        <div
+          className={`${
+            isAdminSidebarOpen
+              ? "fixed inset-0 z-50 lg:static lg:block w-2/3"
+              : "hidden lg:block"
+          }  lg:col-span-1 pl-5 w-full h-full bg-primaryWhite`}
+        >
           <AdminSidebar />
         </div>
         <div className="col-span-4 flex flex-col justify-start items-start px-5 py-2 lg:col-span-3">

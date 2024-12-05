@@ -5,7 +5,8 @@ import accountOptionReducer from "./accountOptions";
 import sidebarReducer from "./sidebarSlice";
 import addProductReducer from "../admin/features/addProductSlice";
 import productReducer from "../features/productSlice";
-import searchReducer from "../features/searchSlice"
+import searchReducer from "../features/searchSlice";
+import adminSidebarReducer from "../admin/features/adminSidebarSlice";
 
 export const store = configureStore({
   reducer: {
@@ -13,8 +14,9 @@ export const store = configureStore({
     user: userReducer,
     accountOption: accountOptionReducer,
     sidebar: sidebarReducer,
+    adminSidebar: adminSidebarReducer,
     addProduct: addProductReducer,
     product: productReducer,
-    search: searchReducer
+    search: searchReducer,
   },
 });

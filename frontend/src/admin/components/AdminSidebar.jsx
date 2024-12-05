@@ -7,10 +7,17 @@ import { IoIosClose } from "react-icons/io";
 import { useLocation } from "react-router-dom";
 import { FaBoxOpen } from "react-icons/fa6";
 import Logo from "../../components/Logo";
+import { closeAdminSidebar } from "../features/adminSidebarSlice";
+import { useDispatch } from "react-redux";
 
 const AdminSidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
+
+  const handleCloseAdminSidebar = () => {
+    dispatch(closeAdminSidebar(false));
+  };
 
   return (
     <div className="border-r-[1px] h-screen md:sticky md:top-0">
@@ -22,6 +29,7 @@ const AdminSidebar = () => {
         <button
           type="button"
           className="block text-2xl text-primaryBlue md:hidden"
+          onClick={handleCloseAdminSidebar}
         >
           <IoIosClose />
         </button>
