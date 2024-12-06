@@ -3,7 +3,7 @@ import axios from "axios";
 const backendURL = "https://grocerease-backend-oif1.onrender.com"
 
 const product = axios.create({
-  baseURL: {`${backendURL}/product`},
+  baseURL: `${backendURL}/product`,
   withCredentials: true,
 });
 
