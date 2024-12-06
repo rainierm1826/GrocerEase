@@ -10,31 +10,17 @@ const product = axios.create({
   }
 });
 
-// Add an interceptor to log request details
-product.interceptors.request.use(
-  (config) => {
-    console.log('Request Config:', {
-      method: config.method,
-      url: config.url,
-      baseURL: config.baseURL,
-      headers: config.headers
-    });
-    return config;
-  },
-  (error) => {
-    console.error('Request Error:', error);
-    return Promise.reject(error);
-  }
-);
-
 export const getUserProducts = async () => {
   try {
     const response = await product.get("/get");
-    console.log('getUserProducts Response:', response);
     return response.data;
   } catch (error) {
-    console.error('getUserProducts Error:', error.response ? error.response.data : error.message);
-    throw error; // Re-throw to allow caller to handle
+    console.error('getUserProducts Error:', {
+      message: error.message,
+      response: error.response ? error.response.data : 'No response',
+      config: error.config
+    });
+    throw error;
   }
 };
 
