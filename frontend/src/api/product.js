@@ -1,8 +1,7 @@
 import axios from "axios";
 
-const backendURL = "https://grocerease-backend-oif1.onrender.com";
 const product = axios.create({
-  baseURL: `${backendURL}/product`,
+  baseURL: "https://grocerease-backend-oif1.onrender.com/product",
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
