@@ -5,7 +5,7 @@ export default defineConfig({
   plugins: [react()],
   build: {
     rollupOptions: {
-      external: ['some-external-module'], // Replace with the problematic module name
+      external: ['mongoose'], // Exclude mongoose or other backend-specific modules
     },
   },
 });
