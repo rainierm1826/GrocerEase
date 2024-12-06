@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const auth = axios.create({
-  baseURL: "http://localhost:5000/auth",
+  baseURL: "https://grocerease-backend-oif1.onrender.com",
   withCredentials: true,
 });
 
