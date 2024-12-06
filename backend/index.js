@@ -28,7 +28,11 @@ app.use(express.json({ limit: "10mb" }));
 // cors
 app.use(
   cors({
-    origin: "https://grocerease-1ik4.onrender.com",
+    origin: [
+      "https://grocerease-1ik4.onrender.com",
+      "http://localhost:5173", // Keep this for local development
+      "http://localhost:5000"  // Add any other local development origins
+    ],
     credentials: true,
     methods: ["POST", "GET", "PUT", "DELETE"],
   })
