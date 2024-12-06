@@ -1,5 +1,4 @@
 import axios from "axios";
-import Order from "../../../../backend/models/orderModel";
 
 const adminOrder = axios.create({
   baseURL: "http://localhost:5000/order",
