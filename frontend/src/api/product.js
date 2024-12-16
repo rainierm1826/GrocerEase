@@ -1,9 +1,11 @@
 import axios from "axios";
 
-const baseURL = "https://grocerease-backend-oif1.onrender.com/product";
+const isProduction = window.location.hostname !== "localhost";
 
 const product = axios.create({
-  baseURL: baseURL,
+  baseURL: isProduction
+    ? "https://grocerease-backend-oif1.onrender.com" // Production URL
+    : "http://localhost:5000", // Development URL
   withCredentials: true,
 });
 
