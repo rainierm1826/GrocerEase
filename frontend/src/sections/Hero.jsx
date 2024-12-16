@@ -1,12 +1,11 @@
 import React from "react";
-import Filter from "../components/Filters";
 import HeroCards from "../components/HeroCards";
 import HeroProductCards from "../components/HeroProductCards";
 import heroImage from "../assets/heroImage.png";
 import { useSelector } from "react-redux";
 import { PulseLoader } from "react-spinners";
 import { useQuery } from "@tanstack/react-query";
-import { getUserProducts } from "../api/product";
+import { getUserProduct } from "../api/product";
 import { topProducts } from "../admin/api/sales";
 
 const Hero = () => {
@@ -16,7 +15,7 @@ const Hero = () => {
 
   const { data, isLoading, isError } = useQuery(
     ["userProduct"],
-    getUserProducts
+    getUserProduct
   );
   const { data: topProduct = [], isLoading: isTopProductLoading } = useQuery(
     ["top-product"],

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const cart = axios.create({
-  baseURL: "https://grocerease-backend-oif1.onrender.com",
+  baseURL: "https://grocerease-backend-oif1.onrender.com/cart",
   withCredentials: true,
 });
 
@@ -77,7 +77,7 @@ export const deleteCart = async ({ userId, productId }) => {
 };
 
 export const editCart = async ({ userId, productId, quantity }) => {
-  console.log(quantity)
+  console.log(quantity);
   try {
     const { data } = cart.post("/updateCart", { userId, productId, quantity });
     return data;

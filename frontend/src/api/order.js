@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const order = axios.create({
-  baseURL: "https://grocerease-backend-oif1.onrender.com",
+  baseURL: "https://grocerease-backend-oif1.onrender.com/order",
   withCredentials: true,
 });
 
