@@ -1,15 +1,14 @@
 import axios from "axios";
 
-const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+const baseURL = "https://grocerease-backend-oif1.onrender.com/product";
 
 const product = axios.create({
-  baseURL: `${backendUrl}/product`,
+  baseURL: baseURL,
   withCredentials: true,
-  headers: {
-    "Content-Type": "application/json",
-    Accept: "application/json",
-  },
 });
+
+console.log(baseURL);
+
 export const getUserProducts = async () => {
   try {
     const { data } = await product.get("/get");
