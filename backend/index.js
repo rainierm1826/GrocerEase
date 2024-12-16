@@ -9,7 +9,7 @@ import user from "../backend/routes/userRoutes.js";
 import product from "../backend/routes/productRoutes.js";
 import cart from "../backend/routes/cartRoutes.js";
 import order from "../backend/routes/orderRoutes.js";
-import sales from "../backend/routes/salesRoutes.js"
+import sales from "../backend/routes/salesRoutes.js";
 import "./config/googleStrategy.js";
 import "./config/facebookStrategy.js";
 import "./config/localStrategy.js";
@@ -28,11 +28,7 @@ app.use(express.json({ limit: "10mb" }));
 // cors
 app.use(
   cors({
-    origin: [
-      "https://grocerease-1ik4.onrender.com",
-      "http://localhost:5173", // Keep this for local development
-      "http://localhost:5000"  // Add any other local development origins
-    ],
+    origin: ["https://grocerease-1ik4.onrender.com", "http://localhost:5173"],
     credentials: true,
     methods: ["POST", "GET", "PUT", "DELETE"],
   })
@@ -90,7 +86,7 @@ app.use("/cart", cart);
 app.use("/order", order);
 
 // sales routes
-app.use("/sales", sales)
+app.use("/sales", sales);
 
 const PORT = process.env.PORT || 5000;
 

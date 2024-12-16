@@ -5,7 +5,7 @@ import heroImage from "../assets/heroImage.png";
 import { useSelector } from "react-redux";
 import { PulseLoader } from "react-spinners";
 import { useQuery } from "@tanstack/react-query";
-import { getUserProduct } from "../api/product";
+import { getUserProducts } from "../api/product";
 import { topProducts } from "../admin/api/sales";
 
 const Hero = () => {
@@ -15,7 +15,7 @@ const Hero = () => {
 
   const { data, isLoading, isError } = useQuery(
     ["userProduct"],
-    getUserProduct
+    getUserProducts
   );
   const { data: topProduct = [], isLoading: isTopProductLoading } = useQuery(
     ["top-product"],

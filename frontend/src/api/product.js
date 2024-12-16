@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const product = axios.create({
-  baseURL: "https://grocerease-backend-oif1.onrender.com/product",
+  baseURL: "http://localhost:5000/product",
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
@@ -9,7 +9,7 @@ const product = axios.create({
   },
 });
 
-export const getTopProducts = async () => {
+export const getTopProduct = async () => {
   try {
     console.log("Attempting to fetch top products");
     const response = await sales.get("/top-products");
@@ -26,30 +26,21 @@ export const getTopProducts = async () => {
   }
 };
 
-export const filterProducts = async (category) => {
+export const getUserProducts = async () => {
   try {
-    const response = await product.get(`/${category}`);
-    console.log("filterProducts Response:", response);
-    return response.data;
+    const { data } = await product.get("/get");
+    return data;
   } catch (error) {
-    console.error(
-      "filterProducts Error:",
-      error.response ? error.response.data : error.message
-    );
-    throw error;
+    console.error(error);
+    return undefined;
   }
 };
 
 export const getUserProduct = async (productId) => {
   try {
-    const response = await product.get(`/${productId}`);
-    console.log("getUserProduct Response:", response);
-    return response.data;
+    const { data } = await product.get(`/${productId}`);
+    return data;
   } catch (error) {
-    console.error(
-      "getUserProduct Error:",
-      error.response ? error.response.data : error.message
-    );
-    throw error;
+    console.error(error);
   }
 };
