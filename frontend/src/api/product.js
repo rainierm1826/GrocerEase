@@ -12,7 +12,9 @@ const product = axios.create({
 export const getTopProduct = async () => {
   try {
     console.log("Attempting to fetch top products");
-    const response = await sales.get("/top-products");
+    const response = await axios.get(
+      "https://grocerease-backend-oif1.onrender.com/product/top-products"
+    );
     console.log("Response received:", response.data);
     return response.data;
   } catch (error) {
