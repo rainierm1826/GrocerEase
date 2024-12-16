@@ -7,9 +7,7 @@ import { PulseLoader } from "react-spinners";
 import { useQuery } from "@tanstack/react-query";
 import { getUserProducts } from "../api/product";
 import { topProducts } from "../admin/api/sales";
-import { baseURL } from "../api/product";
 const Hero = () => {
-  console.log(baseURL);
   const userInfo = useSelector((state) => state.user.user);
   const loading = useSelector((state) => state.user.loading);
   const query = useSelector((state) => state.search.query.toLowerCase());
