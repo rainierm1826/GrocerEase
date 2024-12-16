@@ -9,11 +9,9 @@ import AccountOptions from "./AccountOptions";
 import { openAccountOptions } from "../features/accountOptions";
 import ProfileImage from "./ProfileImage";
 import { setSearchTerm } from "../features/searchSlice";
-import { baseURL } from "../api/product";
 
 const Navbar = () => {
   const dispatch = useDispatch();
-  console.log(baseURL);
 
   const userInfo = useSelector((state) => state.user.user);
   const loading = useSelector((state) => state.user.loading);
