@@ -9,15 +9,18 @@ const product = axios.create({
   }
 });
 
-export const getUserProducts = async () => {
+export const getTopProducts = async () => {
   try {
-    const response = await product.get("/get");
+    console.log('Attempting to fetch top products');
+    const response = await sales.get('/top-products');
+    console.log('Response received:', response.data);
     return response.data;
   } catch (error) {
-    console.error('getUserProducts Error:', {
+    console.error('Detailed Error:', {
       message: error.message,
-      response: error.response ? error.response.data : 'No response',
-      config: error.config
+      code: error.code,
+      config: error.config,
+      response: error.response ? error.response.data : 'No response data'
     });
     throw error;
   }
