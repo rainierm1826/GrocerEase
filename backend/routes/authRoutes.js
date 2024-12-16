@@ -14,7 +14,7 @@ router.get(
   "/google/callback",
   passport.authenticate("google", {
     failureRedirect: "http://localhost:5173",
-    successRedirect: "http://localhost:5173",
+    successRedirect: "https://grocerease-1ik4.onrender.com",
   })
 );
 
