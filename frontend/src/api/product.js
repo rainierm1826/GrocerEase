@@ -1,13 +1,11 @@
 import axios from "axios";
 
-const baseURL = "https://grocerease-backend-oif1.onrender.com/product";
+export const baseURL = "https://grocerease-backend-oif1.onrender.com/product";
 
 const product = axios.create({
   baseURL: baseURL,
   withCredentials: true,
 });
-
-console.log(baseURL);
 
 export const getUserProducts = async () => {
   try {
