@@ -4,14 +4,14 @@ const isProduction = window.location.hostname !== "localhost";
 
 const product = axios.create({
   baseURL: isProduction
-    ? "https://grocerease-backend-oif1.onrender.com" // Production URL
-    : "http://localhost:5000", // Development URL
+    ? "https://grocerease-backend-oif1.onrender.com"
+    : "http://localhost:5000",
   withCredentials: true,
 });
 
 export const getUserProducts = async () => {
   try {
-    const { data } = await product.get("/get");
+    const { data } = await product.get("/get/fuck");
     return data;
   } catch (error) {
     console.error(error);
