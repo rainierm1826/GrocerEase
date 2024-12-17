@@ -51,16 +51,11 @@ app.use(
     cookie: {
       secure: true, 
       httpOnly: true, 
-      sameSite: "None", 
       maxAge: 14 * 24 * 60 * 60 * 1000, 
     },
   })
 );
 
-app.use((req, res, next) => {
-  console.log("CORS Headers:", res.getHeaders());
-  next();
-});
 
 app.use(passport.initialize());
 app.use(passport.session());
