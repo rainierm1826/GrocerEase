@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const adminOrder = axios.create({
-  baseURL: "http://localhost:5000/order",
+  baseURL: "https://final-project-grocerease.onrender.com/order",
   withCredentials: true,
 });
 
