@@ -7,7 +7,7 @@ const product = axios.create({
 
 export const getUserProducts = async () => {
   try {
-    const { data } = await product.get("/get");
+    const { data } = await product.get("/get/shit");
     return data;
   } catch (error) {
     console.error(error);

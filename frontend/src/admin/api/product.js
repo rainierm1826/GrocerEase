@@ -28,7 +28,7 @@ export const addProduct = async ({
     return { data };
   } catch (error) {
     console.error("Error in addProduct:", error.message);
-    throw error; // Ensure errors propagate to the caller
+    throw error;
   }
 };
 
