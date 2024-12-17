@@ -46,12 +46,13 @@ app.use(
     store: MongoStore.create({
       mongoUrl: process.env.MONGO_URI,
       collectionName: "sessions",
-      ttl: 14 * 24 * 60 * 60,
+      ttl: 14 * 24 * 60 * 60, 
     }),
     cookie: {
-      secure: false,
-      maxAge: 14 * 24 * 60 * 60,
-      saveUninitialized: false,
+      secure: true, 
+      httpOnly: true, 
+      sameSite: "None", 
+      maxAge: 14 * 24 * 60 * 60 * 1000, 
     },
   })
 );
