@@ -29,8 +29,9 @@ app.use(express.json({ limit: "10mb" }));
 app.use(
   cors({
     origin: "https://grocerease-q9nh.onrender.com",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
-    methods: ["POST", "GET", "PUT", "DELETE"],
   })
 );
 
