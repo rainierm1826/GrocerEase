@@ -7,7 +7,7 @@ passport.use(
     {
       clientID: process.env.FACEBOOK_CLIENT_ID,
       clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
-      callbackURL: "http://localhost:5000/auth/facebook/callback",
+      callbackURL: "https://final-project-grocerease.onrender.com/auth/facebook/callback",
       profileFields: ["id", "emails", "name", "displayName", "photos"],
     },
     async (accessToken, refreshToken, profile, done) => {
