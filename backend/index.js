@@ -51,7 +51,7 @@ app.use(
       saveUninitialized: false,
       sameSite: "None",
       httpOnly: true,
-      domain: ".onrender.com",
+      domain: "https://final-project-grocerease-1.onrender.com",
     },
   })
 );
