@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const product = axios.create({
-  baseURL: "http://localhost:5000/product",
+  baseURL: "https://final-project-grocerease.onrender.com/product",
   withCredentials: true,
 });
 
