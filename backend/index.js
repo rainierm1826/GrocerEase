@@ -33,7 +33,6 @@ app.use(
     methods: ["POST", "GET", "PUT", "DELETE"],
   })
 );
-app.options("*", cors());
 
 // session
 app.use(
