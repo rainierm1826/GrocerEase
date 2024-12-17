@@ -13,8 +13,8 @@ router.get(
 router.get(
   "/google/callback",
   passport.authenticate("google", {
-    failureRedirect: "http://localhost:5173",
-    successRedirect: "http://localhost:5173",
+    failureRedirect: "https://final-project-grocerease-1.onrender.com",
+    successRedirect: "https://final-project-grocerease-1.onrender.com",
   })
 );
 
@@ -28,8 +28,8 @@ router.get(
 router.get(
   "/facebook/callback",
   passport.authenticate("facebook", {
-    failureRedirect: "http://localhost:5173",
-    successRedirect: "http://localhost:5173",
+    failureRedirect: "https://final-project-grocerease-1.onrender.com",
+    successRedirect: "https://final-project-grocerease-1.onrender.com",
   })
 );
 
