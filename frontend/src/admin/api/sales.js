@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const sales = axios.create({
-  baseURL: "https://grocerease-backend-oif1.onrender.com/sales",
+  baseURL: "https://grocerease-backend-7b5o.onrender.com/sales",
 });
 
 export const salesCount = async () => {

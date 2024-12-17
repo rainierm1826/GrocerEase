@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const adminOrder = axios.create({
-  baseURL: "https://grocerease-backend-oif1.onrender.com/order",
+  baseURL: "https://grocerease-backend-7b5o.onrender.com/order",
   withCredentials: true,
 });
 

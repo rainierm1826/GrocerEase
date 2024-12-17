@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const auth = axios.create({
-  baseURL: "https://grocerease-backend-oif1.onrender.com/auth",
+  baseURL: "https://grocerease-backend-7b5o.onrender.com/auth",
   withCredentials: true,
 });
 
@@ -19,7 +19,7 @@ export const loginAdmin = async (email, password) => {
     return data;
   } catch (error) {
     console.log(error);
-    return error
+    return error;
   }
 };
 
