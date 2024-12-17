@@ -53,6 +53,11 @@ app.use(
   })
 );
 
+app.use((req, res, next) => {
+  console.log("CORS Headers:", res.getHeaders());
+  next();
+});
+
 app.use(passport.initialize());
 app.use(passport.session());
 
