@@ -51,6 +51,7 @@ app.use(
       saveUninitialized: false,
       sameSite: "None",
       httpOnly: true,
+      domain: ".onrender.com",
     },
   })
 );
