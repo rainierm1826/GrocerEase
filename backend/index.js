@@ -28,7 +28,7 @@ app.use(express.json({ limit: "10mb" }));
 // cors
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "https://final-project-grocerease.onrender.com",
     credentials: true,
     methods: ["POST", "GET", "PUT", "DELETE"],
   })
@@ -47,7 +47,7 @@ app.use(
       ttl: 14 * 24 * 60 * 60,
     }),
     cookie: {
-      secure: false,
+      secure: true,
       maxAge: 14 * 24 * 60 * 60,
       saveUninitialized: false,
     },
