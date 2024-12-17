@@ -1,17 +1,15 @@
 import axios from "axios";
 
-const isProduction = window.location.hostname !== "localhost";
+const baseURL = "https://grocerease-backend-oif1.onrender.com/product";
 
 const product = axios.create({
-  baseURL: isProduction
-    ? "https://grocerease-backend-oif1.onrender.com"
-    : "http://localhost:5000",
+  baseURL: baseURL,
   withCredentials: true,
 });
 
 export const getUserProducts = async () => {
   try {
-    const { data } = await product.get("/get/fuck");
+    const { data } = await product.get("/get");
     return data;
   } catch (error) {
     console.error(error);

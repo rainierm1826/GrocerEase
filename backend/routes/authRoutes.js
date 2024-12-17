@@ -13,8 +13,8 @@ router.get(
 router.get(
   "/google/callback",
   passport.authenticate("google", {
-    failureRedirect: "https://grocerease-1ik4.onrender.com",
-    successRedirect: "https://grocerease-1ik4.onrender.com",
+    failureRedirect: "https://grocerease-zmz5.onrender.com",
+    successRedirect: "https://grocerease-zmz5.onrender.com",
   })
 );
 
@@ -28,8 +28,8 @@ router.get(
 router.get(
   "/facebook/callback",
   passport.authenticate("facebook", {
-    failureRedirect: "https://grocerease-1ik4.onrender.com",
-    successRedirect: "https://grocerease-1ik4.onrender.com",
+    failureRedirect: "https://grocerease-zmz5.onrender.com",
+    successRedirect: "https://grocerease-zmz5.onrender.com",
   })
 );
 
