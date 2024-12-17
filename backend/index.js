@@ -28,7 +28,7 @@ app.use(express.json({ limit: "10mb" }));
 // cors
 app.use(
   cors({
-    origin: "https://final-project-grocerease.onrender.com",
+    origin: "https://final-project-grocerease-1.onrender.com",
     credentials: true,
     methods: ["POST", "GET", "PUT", "DELETE"],
   })
