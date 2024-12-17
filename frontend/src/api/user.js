@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const user = axios.create({
-  baseURL: "https://final-project-grocerease.onrender.com",
+  baseURL: "https://final-project-grocerease.onrender.com/user",
   withCredentials: true,
 });
 
