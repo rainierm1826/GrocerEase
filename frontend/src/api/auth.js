@@ -12,8 +12,7 @@ export const loginAdmin = async (email, password) => {
       {
         email,
         password,
-      },
-      { withCredentials: true }
+      }
     );
 
     return data;
@@ -25,7 +24,7 @@ export const loginAdmin = async (email, password) => {
 
 export const fetchUser = async () => {
   try {
-    const { data } = await auth.get("/user",  { withCredentials: true });
+    const { data } = await auth.get("/user");
     return data;
   } catch (error) {
     console.log(error);
@@ -34,7 +33,7 @@ export const fetchUser = async () => {
 
 export const logout = async () => {
   try {
-    const response = await auth.get("/logout", { withCredentials: true });
+    const response = await auth.get("/logout");
     return response;
   } catch (error) {
     console.error("Logout failed:", error);
