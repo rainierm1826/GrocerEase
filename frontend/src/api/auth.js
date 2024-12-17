@@ -25,7 +25,7 @@ export const loginAdmin = async (email, password) => {
 
 export const fetchUser = async () => {
   try {
-    const { data } = await auth.get("/user");
+    const { data } = await auth.get("/user",  { withCredentials: true });
     return data;
   } catch (error) {
     console.log(error);
