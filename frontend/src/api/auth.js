@@ -3,6 +3,7 @@ import axios from "axios";
 const auth = axios.create({
   baseURL: "https://grocerease-backend-7b5o.onrender.com/auth",
   withCredentials: true,
+  headers: { "Content-Type": "application/json" },
 });
 
 export const loginAdmin = async (email, password) => {
