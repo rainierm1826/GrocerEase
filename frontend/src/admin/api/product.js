@@ -56,7 +56,6 @@ export const updateProduct = async (
   _id,
   { productName, category, price, stock, measurement }
 ) => {
-  console.log(description);
   try {
     const { data } = await product.put("/update", {
       _id,
