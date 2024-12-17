@@ -3,6 +3,9 @@ import axios from "axios";
 const product = axios.create({
   baseURL: "https://grocerease-backend-7b5o.onrender.com/product",
   withCredentials: true,
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
 
 export const getUserProducts = async () => {
