@@ -13,8 +13,8 @@ router.get(
 router.get(
   "/google/callback",
   passport.authenticate("google", {
-    failureRedirect: "https://www.youtube.com/",
-    successRedirect: "https://grocerease-q9nh.onrender.com/",
+    failureRedirect: "https://www.youtube.com",
+    successRedirect: "https://grocerease-q9nh.onrender.com",
   })
 );
 
