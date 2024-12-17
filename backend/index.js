@@ -30,7 +30,7 @@ app.use(
   cors({
     origin: "https://grocerease-q9nh.onrender.com",
     methods: ["GET", "POST", "PUT", "DELETE"],
-    headers: ["Content-Type"],
+    allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
   })
 );
