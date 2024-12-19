@@ -49,7 +49,7 @@ app.use(
     cookie: {
       secure: true,
       maxAge: 14 * 24 * 60 * 60,
-      sameSite: "None",
+      sameSite: "none",
       httpOnly: true,
       domain: "final-project-grocerease-1.onrender.com",
     },
