@@ -50,7 +50,7 @@ app.use(
       secure: true,
       maxAge: 14 * 24 * 60 * 60,
       sameSite: "none",
-      httpOnly: true,
+      httpOnly: false,
       domain: "final-project-grocerease-1.onrender.com",
     },
   })
