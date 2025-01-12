@@ -49,12 +49,12 @@ app.use(
       ttl: 14 * 24 * 60 * 60,
     }),
     cookie: {
-      secure: true,
-      maxAge: 14 * 24 * 60 * 60,
-      httpOnly: false,
-      domain: "final-project-grocerease-1.onrender.com",
-  
-    },
+  secure: true, // Ensures cookies are only sent over HTTPS
+  maxAge: 14 * 24 * 60 * 60, // Cookie lifespan (14 days in milliseconds)
+  httpOnly: false, // Consider setting this to true for better security
+  domain: "final-project-grocerease-1.onrender.com", // Correct format
+},
+
   })
 );
 
