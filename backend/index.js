@@ -25,6 +25,8 @@ databaseConnection();
 
 // middlewares
 app.use(express.json({ limit: "10mb" }));
+app.set("trust proxy", 1);
+
 // cors
 app.use(
   cors({
@@ -50,6 +52,7 @@ app.use(
       secure: true,
       maxAge: 14 * 24 * 60 * 60,
       httpOnly: false,
+      domain: "https://final-project-grocerease-1.onrender.com/",
   
     },
   })
