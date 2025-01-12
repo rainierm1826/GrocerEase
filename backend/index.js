@@ -52,7 +52,7 @@ app.use(
       secure: true,
       maxAge: 14 * 24 * 60 * 60,
       httpOnly: false,
-      domain: "https://final-project-grocerease-1.onrender.com",
+      domain: "final-project-grocerease-1.onrender.com",
   
     },
   })
