@@ -52,7 +52,7 @@ const LoginAdmin = () => {
                 className="bg-gray-100 p-2 rounded-full shadow-md"
                 placeholder="Email"
                 onChange={(e) => handleAdminCredentials(e)}
-                value={"grocerease02@gmail.com}
+                value={"grocerease02@gmail.com"}
                 name="email"
               />
             </div>
