@@ -7,8 +7,8 @@ import { toast } from "react-toastify";
 
 const LoginAdmin = () => {
   const [adminCredentials, setAdminCredentials] = useState({
-    email: "",
-    password: "",
+    email: "grocerease02@gmail.com",
+    password: "grocerease123",
   });
 
   const navigate = useNavigate();
@@ -52,7 +52,7 @@ const LoginAdmin = () => {
                 className="bg-gray-100 p-2 rounded-full shadow-md"
                 placeholder="Email"
                 onChange={(e) => handleAdminCredentials(e)}
-                value={"grocerease02@gmail.com"}
+                value={adminCredentials.email}
                 name="email"
               />
             </div>
@@ -63,7 +63,7 @@ const LoginAdmin = () => {
                 className="bg-gray-100 p-2 rounded-full shadow-md "
                 placeholder="Password"
                 onChange={(e) => handleAdminCredentials(e)}
-                value={"grocerease123"}
+                value={adminCredentials.email}
                 name="password"
               />
             </div>
