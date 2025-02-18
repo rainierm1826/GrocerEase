@@ -4,6 +4,7 @@ import facebookIcon from "../assets/facebookIcon.png";
 import { IoIosClose } from "react-icons/io";
 import { useSelector, useDispatch } from "react-redux";
 import { setClose } from "../features/loginSlice";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -31,7 +32,8 @@ const Login = () => {
           <button
             className="flex items-center border-[1px] border-gray-200 py-2 px-5 rounded-xl w-2/3 hover:bg-gray-100 transition-colors ease-in duration-150"
             onClick={() =>
-              (window.location.href = "https://final-project-grocerease.onrender.com/auth/google")
+              // (window.location.href = "https://final-project-grocerease.onrender.com/auth/google")
+              toast.info("auth is disabled")
             }
           >
             <img src={googleIcon} alt="" className="w-5 h-5" />
@@ -40,7 +42,8 @@ const Login = () => {
           <button
             className="flex items-center border-[1px] border-gray-200 py-2 px-5 rounded-xl w-2/3 hover:bg-gray-100 transition-colors ease-in duration-150"
             onClick={() =>
-              (window.location.href = "https://final-project-grocerease.onrender.com/auth/facebook")
+              // (window.location.href = "https://final-project-grocerease.onrender.com/auth/facebook")
+              toast.info("auth is disabled")
             }
           >
             <img src={facebookIcon} alt="" className="w-5 h-5" />
